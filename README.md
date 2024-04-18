@@ -8,10 +8,10 @@
 
 | Technology                                                                                                                                                                                     | Description                                                                |
 | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------- |
-| <img src="https://bun.sh/logo@2x.png" alt="Bun Logo" width="24" align="center"/> [Bun](https://bun.sh/)                                                                                        | <div style="display: flex; align-items: center;">JS/TS Runtime</div>       |
-| <img src="https://discord.js.org/static/logo.svg" alt="Discord.js Logo" width="24" align="center"/> [Discord.js](https://discord.js.org/)                                                      | <div style="display: flex; align-items: center;">Discord API Library</div> |
-| <img src="https://avatars.githubusercontent.com/u/108468352?s=200&v=4" alt="Drizzle Logo" width="24" align="center"/> [Drizzle](https://orm.drizzle.team/)                                     | <div style="display: flex; align-items: center;">SQL ORM Library</div>     |
-| <img src="https://www.typescriptlang.org/favicon-32x32.png?v=8944a05a8b601855de116c8a56d3b3ae" alt="TypeScript Logo" width="24" align="center"/> [TypeScript](https://www.typescriptlang.org/) | <div style="display: flex; align-items: center;">Typed Language</div>      |
+| <img src="https://bun.sh/logo@2x.png" alt="Bun Logo" width="18" align="center"/> [Bun](https://bun.sh/)                                                                                        | <div style="display: flex; align-items: center;">Runtime</div>       |
+| <img src="https://discord.js.org/static/logo.svg" alt="Discord.js Logo" width="18" align="center"/> [Discord.js](https://discord.js.org/)                                                      | <div style="display: flex; align-items: center;">Discord API</div> |
+| <img src="https://avatars.githubusercontent.com/u/108468352?s=200&v=4" alt="Drizzle Logo" width="18" align="center"/> [Drizzle](https://orm.drizzle.team/)                                     | <div style="display: flex; align-items: center;">Database</div>     |
+| <img src="https://www.typescriptlang.org/favicon-32x32.png?v=8944a05a8b601855de116c8a56d3b3ae" alt="TypeScript Logo" width="18" align="center"/> [TypeScript](https://www.typescriptlang.org/) | <div style="display: flex; align-items: center;">Language</div>      |
 
 ## Install
 
