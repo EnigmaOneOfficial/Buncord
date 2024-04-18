@@ -1,45 +1,15 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "b321c998-a9a1-4726-b855-ac2a65a63ef9",
+  "id": "2abf0727-8bf4-4523-94f3-755a5a870f35",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
-    "movies": {
-      "name": "movies",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "release_year": {
-          "name": "release_year",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
     "users": {
       "name": "users",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": true,
           "notNull": true,
           "autoincrement": false
@@ -51,14 +21,6 @@
           "notNull": false,
           "autoincrement": false,
           "default": "'Unknown'"
-        },
-        "discriminator": {
-          "name": "discriminator",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": 0
         },
         "avatar": {
           "name": "avatar",

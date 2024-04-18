@@ -1,45 +1,15 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "22fa183f-7858-4e35-bfd0-69df796cbaa4",
-  "prevId": "b321c998-a9a1-4726-b855-ac2a65a63ef9",
+  "id": "09d8c9f3-3bcd-4f87-b2e9-f28a37ad1e5f",
+  "prevId": "2abf0727-8bf4-4523-94f3-755a5a870f35",
   "tables": {
-    "movies": {
-      "name": "movies",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "release_year": {
-          "name": "release_year",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
     "users": {
       "name": "users",
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "text",
           "primaryKey": true,
           "notNull": true,
           "autoincrement": false
@@ -63,7 +33,15 @@
           "name": "message_count",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "random": {
+          "name": "random",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false,
           "default": 0
         }

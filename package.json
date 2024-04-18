@@ -2,9 +2,11 @@
   "name": "app",
   "version": "1.0.50",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run src/index.ts --watch",
-    "migrate": "bunx drizzle-kit generate:sqlite --schema ./src/database/schema.ts && bun run src/util/migrate.ts"
+    "dev": "bun run --watch src/index.ts",
+    "__DB__": "",
+    "remake": "bunx drizzle-kit generate:sqlite --schema ./src/database/schema.ts && bun run src/util/migrate.ts",
+    "__BOT__": "",
+    "register": "bun run src/util/register.ts"
   },
   "dependencies": {
     "concurrently": "^8.2.2",

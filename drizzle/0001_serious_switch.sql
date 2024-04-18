@@ -1,0 +1,1 @@
+ALTER TABLE users ADD `random` integer DEFAULT 0;
