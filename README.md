@@ -1,6 +1,8 @@
 <div align="center">
   <h1>Buncord</h1>
+  <br>
   <b>Discord bot template with a focus on simplicity.</b>
+  <br>
   <img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/buncord.png" alt="Buncord" width="200" height="200">
 </div>
 
