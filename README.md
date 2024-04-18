@@ -8,10 +8,10 @@
 
 | Technology                                                                                                                                                                                     | Description                                                                |
 | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------- |
-| <img src="https://bun.sh/logo@2x.png" alt="Bun Logo" width="32" align="center"/> <div align="center">[Bun](https://bun.sh/)</div>                                                                                        | Runtime       |
-| <img src="https://discord.js.org/static/logo.svg" alt="Discord.js Logo" width="32" align="center"/> <div align="center">[Discord.js](https://discord.js.org/)</div>                                                      | Discord API |
-| <img src="https://avatars.githubusercontent.com/u/108468352?s=200&v=4" alt="Drizzle Logo" width="32" align="center"/> <div align="center">[Drizzle](https://orm.drizzle.team/)</div>                                     | Database     |
-| <img src="https://www.typescriptlang.org/favicon-32x32.png?v=8944a05a8b601855de116c8a56d3b3ae" alt="TypeScript Logo" width="32" align="center"/> <div align="center">[TypeScript](https://www.typescriptlang.org/)</div> | Language      |
+| <div align="center"><img src="https://bun.sh/logo@2x.png" alt="Bun Logo" width="32"/>[Bun](https://bun.sh/)</div>                                                                                        | Runtime       |
+| <div align="center"><img src="https://discord.js.org/static/logo.svg" alt="Discord.js Logo" width="32"/>[Discord.js](https://discord.js.org/)</div>                                                      | Discord API |
+| <div align="center"><img src="https://avatars.githubusercontent.com/u/108468352?s=200&v=4" alt="Drizzle Logo" width="32"/>[Drizzle](https://orm.drizzle.team/)</div>                                     | Database     |
+| <div align="center"><img src="https://www.typescriptlang.org/favicon-32x32.png?v=8944a05a8b601855de116c8a56d3b3ae" alt="TypeScript Logo" width="32"/>[TypeScript](https://www.typescriptlang.org/)</div> | Language      |
 
 ## Install
 
