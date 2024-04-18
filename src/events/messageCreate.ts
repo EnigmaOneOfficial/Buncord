@@ -46,13 +46,11 @@ const messageCreate: IEvent<Message> = {
 			message.channel.type !== ChannelType.GuildText &&
 			message.channel.type !== ChannelType.DM
 		) {
-			// Not a text channel
 			return;
 		}
 		if (command.data.permissions && message.channel.type !== ChannelType.DM) {
 			const authorPerms = message.channel.permissionsFor(message.author);
 			if (!authorPerms || !authorPerms.has(command.data.permissions)) {
-				// No permissions
 				return;
 			}
 		}
@@ -67,7 +65,6 @@ const messageCreate: IEvent<Message> = {
 		if (timestamp) {
 			const expirationTime = timestamp + cooldownAmount;
 			if (now < expirationTime) {
-				// Cooldown
 				return;
 			}
 		}

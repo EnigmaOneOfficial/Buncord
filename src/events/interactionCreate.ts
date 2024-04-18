@@ -53,7 +53,6 @@ const interactionCreate: IEvent<ChatInputCommandInteraction> = {
 		if (timestamp) {
 			const expirationTime = timestamp + cooldownAmount;
 			if (now < expirationTime) {
-				// Cooldown
 				return;
 			}
 		} else {
