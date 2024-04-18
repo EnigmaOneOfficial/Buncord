@@ -9,6 +9,7 @@
     "register": "bun run src/util/register.ts"
   },
   "dependencies": {
+    "axios": "^1.6.8",
     "concurrently": "^8.2.2",
     "discord.js": "^14.14.1",
     "dotenv": "^16.4.5",

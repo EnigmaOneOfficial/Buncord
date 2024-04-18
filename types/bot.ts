@@ -39,7 +39,7 @@ export type ICommandExecute<T> = (
 ) => void;
 export type ICommand = {
 	data: ICommandData;
-	builder?: SlashCommandBuilder;
+	builder?: Partial<SlashCommandBuilder>;
 	onMessage: ICommandExecute<Message>;
 	onInteraction: ICommandExecute<ChatInputCommandInteraction>;
 };

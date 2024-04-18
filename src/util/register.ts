@@ -10,20 +10,6 @@ import type { ICommand } from "../../types/bot";
 
 const commands: RESTPostAPIApplicationCommandsJSONBody[] = [];
 
-for (const file of new Glob("*.ts").scanSync("./src/commands/")) {
-	const command = (await import(`~/commands/${file}`)) as {
-		default: ICommand<unknown>;
-	};
-	const { data, builder } = command.default;
-
-	if (!data || !builder) {
-		error(`Invalid command file: ${file}`);
-		continue;
-	}
-
-	commands.push(builder.toJSON());
-}
-
 if (!process.env.TOKEN) {
 	throw error("Missing TOKEN environment variable.");
 }
@@ -36,32 +22,74 @@ const rest = new REST().setToken(process.env.TOKEN);
 			throw error("Missing CLIENT_ID environment variable.");
 		}
 
-		log("Deleting existing application commands");
-		await rest
-			.put(Routes.applicationCommands(process.env.CLIENT_ID), { body: [] })
-			.then(() => log("Successfully deleted application command"))
-			.catch(error);
+		const args = process.argv.slice(2);
+		const guildIdIndex = args.indexOf("--guild");
+		const deleteIndex = args.indexOf("--delete");
+		const guildId = guildIdIndex !== -1 ? args[guildIdIndex + 1] : undefined;
+		const deleteOnly = deleteIndex !== -1;
 
-		log("Registering slash commands");
+		if (guildId) {
+			log(`Deleting existing application commands for guild ${guildId}`);
+			await rest
+				.put(Routes.applicationGuildCommands(process.env.CLIENT_ID, guildId), {
+					body: [],
+				})
+				.then(() =>
+					log("Successfully deleted application commands for the guild"),
+				)
+				.catch(error);
+		} else {
+			log("Deleting existing global application commands");
+			await rest
+				.put(Routes.applicationCommands(process.env.CLIENT_ID), { body: [] })
+				.then(() => log("Successfully deleted global application commands"))
+				.catch(error);
+		}
 
-		await rest
-			.put(Routes.applicationCommands(process.env.CLIENT_ID), {
-				body: commands,
-			})
-			.then(() =>
-				log(
-					`Successfully registered the following slash commands: ${commands
-						.map((command) => command.name)
-						.join(", ")}`,
-				),
-			)
-			.catch(error);
+		if (!deleteOnly) {
+			for (const file of new Glob("*.ts").scanSync("./src/commands/")) {
+				const command = (await import(`~/commands/${file}`)) as {
+					default: ICommand;
+				};
+				const { data, builder } = command.default;
+				if (!data || !builder || !builder.toJSON) {
+					error(`Invalid command file: ${file}`);
+					continue;
+				}
+				commands.push(builder.toJSON());
+			}
 
-		log(
-			`Successfully reloaded the following slash commands: ${commands
-				.map((command) => command.name)
-				.join(", ")}`,
-		);
+			if (guildId) {
+				log(`Registering slash commands for guild ${guildId}`);
+				await rest
+					.put(
+						Routes.applicationGuildCommands(process.env.CLIENT_ID, guildId),
+						{ body: commands },
+					)
+					.then(() =>
+						log(
+							`Successfully registered the following slash commands for the guild: ${commands
+								.map((command) => command.name)
+								.join(", ")}`,
+						),
+					)
+					.catch(error);
+			} else {
+				log("Registering global slash commands");
+				await rest
+					.put(Routes.applicationCommands(process.env.CLIENT_ID), {
+						body: commands,
+					})
+					.then(() =>
+						log(
+							`Successfully registered the following global slash commands: ${commands
+								.map((command) => command.name)
+								.join(", ")}`,
+						),
+					)
+					.catch(error);
+			}
+		}
 	} catch (err) {
 		error(err as string);
 	}
