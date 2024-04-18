@@ -1,9 +1,7 @@
-# Buncord
-
 <div align="center">
-  <img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/buncord.png" alt="Buncord" width="200" height="200">
+  **Buncord is a Discord bot template with an emphasis on DX.**
   <br>
-  Buncord is a Discord bot template with an emphasis on DX.
+  <img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/buncord.png" alt="Buncord" width="200" height="200">
 </div>
 
 ## Stack
