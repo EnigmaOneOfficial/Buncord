@@ -1,9 +1,9 @@
 const config = {
-    debug: true,
-    database: {
-        name: 'my-database',
-        version: 1,
-    }
-}
+	debug: true,
+	database: {
+		name: "buncord",
+		version: 1,
+	},
+};
 
 export default config;
