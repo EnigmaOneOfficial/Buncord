@@ -44,3 +44,7 @@ package-lock.json
 
 # drizzle
 /drizzle
+*.db
+
+# bun
+bun.lockb
