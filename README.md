@@ -1,5 +1,5 @@
 <div align="center">
-  **Buncord is a Discord bot template with an emphasis on DX.**
+  <b>Buncord is a Discord bot template with an emphasis on DX.**</b>
   <br>
   <img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/buncord.png" alt="Buncord" width="200" height="200">
 </div>
@@ -33,7 +33,7 @@ CLIENT_ID=your_discord_bot_client_id
 On first run and whenever the schemas are updated in `src/database/schema.ts`, run the following command:
 
 ```bash
-bun run remake # Creates database information & updates schemas
+bun run remake
 ```
 
 To start the bot, run the following command:
