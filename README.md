@@ -32,13 +32,21 @@ CLIENT_ID=your_discord_bot_client_id
 
 ## Run
 
-On first run and whenever the schemas are updated in `src/database/schema.ts`, run the following command:
+First, generate the database files:
 
 ```bash
 bun run remake
+# Rerun this whenever the files in the `src/database/schemas` directory are changed
 ```
 
-To start the bot, run the following command:
+Next, register the bot's slash commands with Discord:
+
+```bash
+bun run register
+# Rerun this whenever the slash command builders in the `src/commands` directory are changed
+```
+
+Finally, start the bot:
 
 ```bash
 bun dev
