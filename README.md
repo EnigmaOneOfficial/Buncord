@@ -1,7 +1,7 @@
 # Buncord
 
 <div align="center">
-  ![Buncord](https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/buncord.png)
+  <img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/buncord.png" alt="Buncord" width="200" height="200">
   <br>
   Buncord is a Discord bot template with an emphasis on DX.
 </div>
