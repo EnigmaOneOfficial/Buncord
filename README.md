@@ -6,12 +6,12 @@
 
 ## Stack
 
-| Technology                                                                                                                                                                                                  |
-| :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://bun.sh/logo@2x.png" alt="Bun Logo" width="32"/> [Bun](https://bun.sh/) - JS/TS Runtime                                                                                                    |
-| <img src="https://discord.js.org/static/logo.svg" alt="Discord.js Logo" width="32"/> [Discord.js](https://discord.js.org/) - Discord API Library                                                            |
-| <img src="https://orm.drizzle.team/logo.svg" alt="Drizzle Logo" width="32"/> [Drizzle](https://orm.drizzle.team/) - SQL ORM Library                                                                         |
-| <img src="https://www.typescriptlang.org/favicon-32x32.png?v=8944a05a8b601855de116c8a56d3b3ae" alt="TypeScript Logo" width="32"/> [TypeScript](https://www.typescriptlang.org/) - Typed JavaScript Language |
+| Technology                                                                                                                                                                      | Description               |
+| :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :------------------------ |
+| <img src="https://bun.sh/logo@2x.png" alt="Bun Logo" width="32"/> [Bun](https://bun.sh/)                                                                                        | JS/TS Runtime             |
+| <img src="https://discord.js.org/static/logo.svg" alt="Discord.js Logo" width="32"/> [Discord.js](https://discord.js.org/)                                                      | Discord API Library       |
+| <img src="https://avatars.githubusercontent.com/u/108468352?s=200&v=4" alt="Drizzle Logo" width="32"/> [Drizzle](https://orm.drizzle.team/)                                     | SQL ORM Library           |
+| <img src="https://www.typescriptlang.org/favicon-32x32.png?v=8944a05a8b601855de116c8a56d3b3ae" alt="TypeScript Logo" width="32"/> [TypeScript](https://www.typescriptlang.org/) | Typed JavaScript Language |
 
 ## Install
 
