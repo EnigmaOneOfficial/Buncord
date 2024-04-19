@@ -45,18 +45,24 @@ bun run remake
 Register the slash commands:
 
 ```bash
-bun run register
+bun run register # --guild <guild_id> to register them in a specific guild
+```
+
+Unregister the slash commandss:
+
+```bash
+bun run unregister # --guild <guild_id> to unregister them in a specific guild
 ```
 
 ## Start
 
-Start with watch mode enabled:
+Run with hot reloading:
 
 ```bash
 bun dev
 ```
 
-Start without watch mode:
+Run without hot reloading:
 
 ```bash
 bun start
