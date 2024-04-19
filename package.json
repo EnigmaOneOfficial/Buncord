@@ -12,10 +12,7 @@
 		"__GITHUB__": "",
 		"git:readme": "git add README.md && git commit -m 'Update README.md' && git push",
 		"git:general": "git add . && git commit -m 'General updates' && git push",
-		"git:refactor": "git add . && git commit -m 'Refactor code' && git push",
-		"git:commit": "git add . && git commit -m",
-		"git:push": "git push",
-		"git:branch": "git checkout -b"
+		"git:refactor": "git add . && git commit -m 'Refactor code' && git push"
 	},
 	"dependencies": {
 		"concurrently": "^8.2.2",
