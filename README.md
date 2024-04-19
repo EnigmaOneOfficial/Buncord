@@ -45,13 +45,15 @@ bun run remake
 Register the slash commands:
 
 ```bash
-bun run register # --guild <guild_id> to register them in a specific guild
+# Register to a specific guild: --guild <guild_id>
+bun run register
 ```
 
 Unregister the slash commandss:
 
 ```bash
-bun run unregister # --guild <guild_id> to unregister them in a specific guild
+# Unregister from a specific guild: --guild <guild_id>
+bun run unregister
 ```
 
 ## Start
