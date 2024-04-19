@@ -16,7 +16,7 @@
 | <div align="center"><img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/bun.png" alt="Bun Logo" width="28"/></div> | [Bun](https://bun.sh/) | Runtime |
 | <div align="center"><img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/discord.svg" alt="Discord.js Logo" width="64"/></div> | [Discord.js](https://discord.js.org/) | Discord API |
 | <div align="center"><img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/drizzle.png" alt="Drizzle Logo" width="28"/></div> | [Drizzle](https://orm.drizzle.team/) | Database |
-| <div align="center"><img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/typescript.png" alt="TypeScript Logo" width="24"/></div> | [TypeScript](https://www.typescriptlang.org/) | Language |
+| <div align="center"><img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/typescript.png" alt="TypeScript Logo" width="28"/></div> | [TypeScript](https://www.typescriptlang.org/) | Language |
 </div>
 
 ## Quickstart
