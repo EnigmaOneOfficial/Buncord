@@ -1,5 +1,5 @@
 {
-	"name": "app",
+	"name": "buncord",
 	"version": "1.0.50",
 	"scripts": {
 		"__BOT__": "",
@@ -28,5 +28,5 @@
 		"bun-types": "latest",
 		"drizzle-kit": "^0.20.14"
 	},
-	"module": "src/index.js"
+	"module": "src/index.ts"
 }
