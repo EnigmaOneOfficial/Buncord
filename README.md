@@ -2,7 +2,6 @@
   <img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/buncord.png" alt="Buncord" width="200" height="200">
   <br>
   <a href="https://github.com/EnigmaOneOfficial/Buncord/stargazers"><img src="https://img.shields.io/github/stars/EnigmaOneOfficial/Buncord?style=social" alt="Stars Badge"/></a>
-  <a href="https://github.com/EnigmaOneOfficial/Buncord/network/members"><img src="https://img.shields.io/github/forks/EnigmaOneOfficial/Buncord?style=social" alt="Forks Badge"/></a>
   <a href="https://github.com/EnigmaOneOfficial/Buncord/issues"><img src="https://img.shields.io/github/issues/EnigmaOneOfficial/Buncord" alt="Issues Badge"/></a>
   <a href="https://github.com/EnigmaOneOfficial/Buncord/blob/main/LICENSE"><img src="https://img.shields.io/github/license/EnigmaOneOfficial/Buncord" alt="License Badge"/></a>
   <br>
