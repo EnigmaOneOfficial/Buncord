@@ -1,24 +1,28 @@
 {
-  "name": "app",
-  "version": "1.0.50",
-  "scripts": {
-    "dev": "bun run --watch src/index.ts",
-    "__DB__": "",
-    "remake": "bunx drizzle-kit generate:sqlite --schema ./src/database/schema.ts && bun run src/util/migrate.ts",
-    "__BOT__": "",
-    "register": "bun run src/util/register.ts"
-  },
-  "dependencies": {
-    "axios": "^1.6.8",
-    "concurrently": "^8.2.2",
-    "discord.js": "^14.14.1",
-    "dotenv": "^16.4.5",
-    "drizzle": "^1.4.0",
-    "drizzle-orm": "^0.30.8"
-  },
-  "devDependencies": {
-    "bun-types": "latest",
-    "drizzle-kit": "^0.20.14"
-  },
-  "module": "src/index.js"
+	"name": "app",
+	"version": "1.0.50",
+	"scripts": {
+		"__BOT__": "",
+		"start": "bun run src/index.ts",
+		"dev": "bun run --watch src/index.ts",
+		"register": "bun run src/util/register.ts",
+		"__DB__": "",
+		"remake": "bunx drizzle-kit generate:sqlite --schema ./src/database/schema.ts && bun run src/util/migrate.ts",
+		"__GITHUB__": "",
+		"readme-update": "git add README.md && git commit -m 'Update README.md' && git push -u origin master",
+		"general-update": "git add . && git commit -m 'General updates including improvements and bugfixes' && git push -u origin master"
+	},
+	"dependencies": {
+		"axios": "^1.6.8",
+		"concurrently": "^8.2.2",
+		"discord.js": "^14.14.1",
+		"dotenv": "^16.4.5",
+		"drizzle": "^1.4.0",
+		"drizzle-orm": "^0.30.8"
+	},
+	"devDependencies": {
+		"bun-types": "latest",
+		"drizzle-kit": "^0.20.14"
+	},
+	"module": "src/index.js"
 }
