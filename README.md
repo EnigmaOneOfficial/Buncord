@@ -30,7 +30,7 @@ bun i
 
 ## Setup
 
-0. Get your [Discord bot token](https://discord.com/developers/applications) and [application ID](https://discord.com/developers/applications) and put them in a `.env` file in the root directory of the project:
+Get your [Discord bot token](https://discord.com/developers/applications) and [application ID](https://discord.com/developers/applications) and put them in a `.env` file in the root directory of the project:
 
 
 ```env
@@ -38,19 +38,19 @@ TOKEN=your_discord_bot_token
 APPLICATION_ID=your_discord_bot_application_id
 ```
 
-1. Create and populate the database:
+Create and populate the database:
 
 ```bash
 bun run remake
 ```
 
-2. Register the bot's slash commands with Discord:
+Register the bot's slash commands with Discord:
 
 ```bash
 bun run register
 ```
 
-3. Start the bot:
+Start the bot:
 
 ```bash
 bun dev
