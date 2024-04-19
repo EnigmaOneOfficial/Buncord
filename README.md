@@ -36,24 +36,24 @@ TOKEN=your_discord_bot_token
 APPLICATION_ID=your_discord_bot_application_id
 ```
 
-Create the database files:
+Create the database:
 
 ```bash
-bun run remake
+bun run db:build
 ```
 
-Register the slash commands:
+Register the slash commands (`src/commands`):
 
 ```bash
 # Register to a specific guild: --guild <guild_id>
-bun run register
+bun run bot:register
 ```
 
-Unregister the slash commandss:
+Unregister the slash commands:
 
 ```bash
 # Unregister from a specific guild: --guild <guild_id>
-bun run unregister
+bun run bot:unregister
 ```
 
 ## Start
