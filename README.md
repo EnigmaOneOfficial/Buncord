@@ -27,7 +27,7 @@ cd Buncord
 bun i
 ```
 
-## Setup
+## Quickstart
 
 Get your [Discord bot token](https://discord.com/developers/applications) and [application ID](https://discord.com/developers/applications) and put them in a `.env` file in the root directory of the project:
 
@@ -55,8 +55,6 @@ Unregister the slash commands:
 # Unregister from a specific guild: --guild <guild_id>
 bun run bot:unregister
 ```
-
-## Start
 
 Run with hot reloading:
 
