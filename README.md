@@ -6,7 +6,7 @@
 
 ## Stack
 
-| Technology                                                                                                                                                                                     | Description                                                                |
+| Technology                                                                                                                                                                                     | Context                                                                |
 | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------- |
 | <div align="center"><img src="https://bun.sh/logo@2x.png" alt="Bun Logo" width="32"/><div align="center">[Bun](https://bun.sh/)</div></div>                                                                                     | Runtime       |
 | <div align="center"><img src="https://discord.js.org/static/logo.svg" alt="Discord.js Logo" width="64"/><div align="center">[Discord.js](https://discord.js.org/)</div></div>                                                  | Discord API |
