@@ -48,10 +48,16 @@ Register the slash commands:
 bun run register
 ```
 
-## Run
+## Start
 
-Start the bot:
+Start with watch mode enabled:
 
 ```bash
 bun dev
+```
+
+Start without watch mode:
+
+```bash
+bun start
 ```
