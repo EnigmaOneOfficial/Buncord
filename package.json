@@ -10,10 +10,10 @@
 		"__DB__": "",
 		"db:build": "bunx drizzle-kit generate:sqlite --schema ./src/db/schema.ts && bun run src/util/migrate.ts",
 		"__GITHUB__": "",
-		"git:readme": "git add README.md && git commit -m 'Update README.md' && git push -u origin master",
-		"git:general": "git add . && git commit -m 'General updates including improvements and bugfixes' && git push -u origin master",
-		"git:refactor": "git add . && git commit -m 'Refactor code' && git push -u origin master",
-		"git:commit": "git add . && git commit -m \"$@\" && git push -u origin master"
+		"git:readme": "git add README.md && git commit -m 'Update README.md' && git push",
+		"git:general": "git add . && git commit -m 'General updates including improvements and bugfixes' && git push",
+		"git:refactor": "git add . && git commit -m 'Refactor code' && git push",
+		"git:commit": "git add . && git commit -m \"$@\" && git push"
 	},
 	"dependencies": {
 		"concurrently": "^8.2.2",
