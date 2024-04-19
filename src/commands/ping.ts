@@ -14,7 +14,6 @@ const data: ICommandData = {
 	description: "Replies with Pong!",
 	usage: "!ping",
 	cooldown: 1,
-	aliases: ["p"],
 };
 
 const onInteraction: ICommandExecute<ChatInputCommandInteraction> = async (

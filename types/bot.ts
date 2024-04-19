@@ -15,10 +15,11 @@ export type IClient = Client & {
 	db: typeof db;
 };
 
+export type IEventExecute<T> = (client: IClient, ...args: T[]) => void;
 export type IEvent<T> = {
 	name: string;
 	once?: boolean;
-	execute: (client: IClient, ...args: T[]) => void;
+	execute: IEventExecute<T>;
 };
 
 export type IEvents = Collection<string, IEvent<unknown>>;

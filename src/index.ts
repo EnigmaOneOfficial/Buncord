@@ -11,6 +11,14 @@ import type {
 	IEvent,
 } from "../types/bot";
 
+if (!process.env.TOKEN) {
+	throw error("Missing TOKEN environment variable");
+}
+
+if (!process.env.APPLICATION_ID) {
+	throw error("Missing APPLICATION_ID environment variable");
+}
+
 export const bot = new Client({
 	intents: [
 		GatewayIntentBits.Guilds,
@@ -57,9 +65,5 @@ bot.commands = commands;
 bot.events = events;
 bot.cooldowns = cooldowns;
 bot.db = db;
-
-if (!process.env.TOKEN) {
-	throw error("Missing TOKEN environment variable");
-}
 
 bot.login(process.env.TOKEN);

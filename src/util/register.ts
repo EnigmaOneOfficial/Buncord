@@ -9,19 +9,16 @@ import { error, log } from "./log";
 import type { ICommand } from "../../types/bot";
 
 const commands: RESTPostAPIApplicationCommandsJSONBody[] = [];
-
 if (!process.env.TOKEN) {
 	throw error("Missing TOKEN environment variable.");
 }
-
 const rest = new REST().setToken(process.env.TOKEN);
 
 (async () => {
+	if (!process.env.APPLICATION_ID) {
+		throw error("Missing APPLICATION_ID environment variable.");
+	}
 	try {
-		if (!process.env.APPLICATION_ID) {
-			throw error("Missing APPLICATION_ID environment variable.");
-		}
-
 		const args = process.argv.slice(2);
 		const guildIdIndex = args.indexOf("--guild");
 		const deleteIndex = args.indexOf("--delete");
