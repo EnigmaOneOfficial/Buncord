@@ -18,8 +18,8 @@ const rest = new REST().setToken(process.env.TOKEN);
 
 (async () => {
 	try {
-		if (!process.env.CLIENT_ID) {
-			throw error("Missing CLIENT_ID environment variable.");
+		if (!process.env.APPLICATION_ID) {
+			throw error("Missing APPLICATION_ID environment variable.");
 		}
 
 		const args = process.argv.slice(2);
@@ -31,9 +31,12 @@ const rest = new REST().setToken(process.env.TOKEN);
 		if (guildId) {
 			log(`Deleting existing application commands for guild ${guildId}`);
 			await rest
-				.put(Routes.applicationGuildCommands(process.env.CLIENT_ID, guildId), {
-					body: [],
-				})
+				.put(
+					Routes.applicationGuildCommands(process.env.APPLICATION_ID, guildId),
+					{
+						body: [],
+					},
+				)
 				.then(() =>
 					log("Successfully deleted application commands for the guild"),
 				)
@@ -41,7 +44,9 @@ const rest = new REST().setToken(process.env.TOKEN);
 		} else {
 			log("Deleting existing global application commands");
 			await rest
-				.put(Routes.applicationCommands(process.env.CLIENT_ID), { body: [] })
+				.put(Routes.applicationCommands(process.env.APPLICATION_ID), {
+					body: [],
+				})
 				.then(() => log("Successfully deleted global application commands"))
 				.catch(error);
 		}
@@ -63,7 +68,10 @@ const rest = new REST().setToken(process.env.TOKEN);
 				log(`Registering slash commands for guild ${guildId}`);
 				await rest
 					.put(
-						Routes.applicationGuildCommands(process.env.CLIENT_ID, guildId),
+						Routes.applicationGuildCommands(
+							process.env.APPLICATION_ID,
+							guildId,
+						),
 						{ body: commands },
 					)
 					.then(() =>
@@ -77,7 +85,7 @@ const rest = new REST().setToken(process.env.TOKEN);
 			} else {
 				log("Registering global slash commands");
 				await rest
-					.put(Routes.applicationCommands(process.env.CLIENT_ID), {
+					.put(Routes.applicationCommands(process.env.APPLICATION_ID), {
 						body: commands,
 					})
 					.then(() =>

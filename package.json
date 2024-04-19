@@ -5,12 +5,13 @@
 		"__BOT__": "",
 		"start": "bun run src/index.ts",
 		"dev": "bun run --watch src/index.ts",
-		"register": "bun run src/util/register.ts",
+		"bot:register": "bun run src/util/register.ts",
+		"bot:unregister": "bun run src/util/register.ts --delete",
 		"__DB__": "",
-		"remake": "bunx drizzle-kit generate:sqlite --schema ./src/database/schema.ts && bun run src/util/migrate.ts",
+		"db:build": "bunx drizzle-kit generate:sqlite --schema ./src/database/schema.ts && bun run src/util/migrate.ts",
 		"__GITHUB__": "",
-		"readme-update": "git add README.md && git commit -m 'Update README.md' && git push -u origin master",
-		"general-update": "git add . && git commit -m 'General updates including improvements and bugfixes' && git push -u origin master"
+		"git:readme": "git add README.md && git commit -m 'Update README.md' && git push -u origin master",
+		"git:general": "git add . && git commit -m 'General updates including improvements and bugfixes' && git push -u origin master"
 	},
 	"dependencies": {
 		"axios": "^1.6.8",
