@@ -13,7 +13,7 @@
 		"git:readme": "git add README.md && git commit -m 'Update README.md' && git push",
 		"git:general": "git add . && git commit -m 'General updates including improvements and bugfixes' && git push",
 		"git:refactor": "git add . && git commit -m 'Refactor code' && git push",
-		"git:commit": "git add . && git commit -m \"$@\" && git push"
+		"git:commit": "git add . && git commit -m \"$1\" && git push -u origin master"
 	},
 	"dependencies": {
 		"concurrently": "^8.2.2",
