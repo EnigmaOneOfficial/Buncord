@@ -40,7 +40,7 @@ APPLICATION_ID=your_discord_bot_application_id
 
 ### Database
 
-Build the database (`src/database/schemas`):
+Build the database (`src/db/schemas`):
 
 ```bash
 bun run db:build

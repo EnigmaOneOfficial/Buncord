@@ -6,7 +6,7 @@ import type {
 	PermissionResolvable,
 	SlashCommandBuilder,
 } from "discord.js";
-import type { db } from "~/database/db";
+import type { db } from "~/db/db";
 
 export type IClient = Client & {
 	commands: ICommands;

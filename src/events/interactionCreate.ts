@@ -4,7 +4,7 @@ import {
 	Events,
 } from "discord.js";
 import { eq } from "drizzle-orm";
-import { users } from "~/database/schema";
+import { users } from "~/db/schema";
 import { error } from "~/util/log";
 import type { IEvent } from "../../types/bot";
 

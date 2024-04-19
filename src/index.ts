@@ -1,6 +1,6 @@
 import { Glob } from "bun";
 import { Client, Collection, GatewayIntentBits } from "discord.js";
-import { db } from "./database/db";
+import { db } from "./db/db";
 import "dotenv/config";
 import { error } from "./util/log";
 import type {
