@@ -42,6 +42,8 @@ Create the database:
 bun run db:build
 ```
 
+### Slash Commands
+
 Register the slash commands (`src/commands`):
 
 ```bash
@@ -56,13 +58,15 @@ Unregister the slash commands:
 bun run bot:unregister
 ```
 
-Run with hot reloading:
+### Run
+
+Start with hot reloading:
 
 ```bash
 bun dev
 ```
 
-Run without hot reloading:
+Start without hot reloading:
 
 ```bash
 bun start
