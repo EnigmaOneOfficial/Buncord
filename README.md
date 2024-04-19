@@ -4,6 +4,8 @@
   <a href="https://github.com/EnigmaOneOfficial/Buncord/stargazers"><img src="https://img.shields.io/github/stars/EnigmaOneOfficial/Buncord?style=social" alt="Stars Badge"/></a>
   <a href="https://github.com/EnigmaOneOfficial/Buncord/issues"><img src="https://img.shields.io/github/issues/EnigmaOneOfficial/Buncord" alt="Issues Badge"/></a>
   <a href="https://github.com/EnigmaOneOfficial/Buncord/pulls"><img src="https://img.shields.io/github/issues-pr/EnigmaOneOfficial/Buncord" alt="Pull Requests Badge"/></a>
+  <a href="https://github.com/EnigmaOneOfficial/Buncord/blob/master/LICENSE"><img src="https://img.shields.io/github/license/EnigmaOneOfficial/Buncord" alt="License Badge"/></a>
+
 
   <br>
   <b>Discord.js bot template focused on simplicity and reliability.</b>
