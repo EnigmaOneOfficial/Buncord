@@ -11,8 +11,8 @@
 
 <div align="center">
 
-| Logo | Name                                                                                                                                                                                     | Context                                                                |
-| :-----:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------- |
+| Logo | Name | Context |
+| :----- | :----- | :----- |
 | <img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/bun.png" alt="Bun Logo" width="32"/> | [Bun](https://bun.sh/)                                                                                     | Runtime       |
 | <img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/discord.svg" alt="Discord.js Logo" width="64"/> | [Discord.js](https://discord.js.org/)                                                 | Discord API |
 | <img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/drizzle.png" alt="Drizzle Logo" width="32"/> | [Drizzle](https://orm.drizzle.team/)                                    | Database     |
