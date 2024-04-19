@@ -19,15 +19,15 @@
 | <div align="center"><img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/typescript.png" alt="TypeScript Logo" width="32"/><div align="center">[TypeScript](https://www.typescriptlang.org/)</div></div> | Language      |
 </div>
 
-## Install
+## Quickstart
+
+### Install
 
 ```bash
 git clone https://github.com/EnigmaOneOfficial/Buncord
 cd Buncord
 bun i
 ```
-
-## Quickstart
 
 ### Environment
 
@@ -40,7 +40,7 @@ APPLICATION_ID=your_discord_bot_application_id
 
 ### Database
 
-Create the database:
+Build the database (`src/database/schemas`):
 
 ```bash
 bun run db:build
