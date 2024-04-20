@@ -28,19 +28,7 @@ const createProfileEmbed = (user: IUsers, inventory: IInventories[]) => {
 	const embed = new EmbedBuilder()
 		.setTitle(`${user.username}'s Profile`)
 		.setThumbnail(user.avatar)
-		.addFields(
-			{ name: "Level", value: user.level.toString(), inline: true },
-			{
-				name: "Current Dungeon",
-				value: user.currentDungeon || "None",
-				inline: false,
-			},
-			{
-				name: "Highest Dungeon Level",
-				value: user.highestDungeonLevel.toString(),
-				inline: false,
-			},
-		)
+		.addFields({ name: "Level", value: user.level.toString(), inline: true })
 		.setColor("#FFD700")
 		.setTimestamp();
 
