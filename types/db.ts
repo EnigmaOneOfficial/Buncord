@@ -1,6 +1,6 @@
-import type { inventories } from "~/schemas/inventories";
+import type { inventories } from "~/db/schemas/inventories";
+import type { users } from "~/db/schemas/users";
 import type { NonNullableTable } from "./utility";
-import type { users } from "~/schemas/users";
 
-export type IInventory = NonNullableTable<typeof inventories.$inferSelect>;
-export type IUser = NonNullableTable<typeof users.$inferSelect>;
+export type IInventories = NonNullableTable<typeof inventories.$inferSelect>;
+export type IUsers = NonNullableTable<typeof users.$inferSelect>;

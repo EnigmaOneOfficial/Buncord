@@ -5,7 +5,7 @@ import {
 } from "discord.js";
 import type { ICommand, ICommandData, ICommandExecute } from "../../types/bot";
 import { addItemToInventory, getInventory, getUser } from "~/db/db";
-import type { IUser } from "../../types/db";
+import type { IUsers } from "../../types/db";
 
 const builder = new SlashCommandBuilder()
 	.setName("profile")
@@ -19,7 +19,7 @@ const data: ICommandData = {
 	aliases: ["p"],
 };
 
-const createProfileEmbed = (user: IUser) => {
+const createProfileEmbed = (user: IUsers) => {
 	const embed = new EmbedBuilder()
 		.setTitle(`${user.username}'s Profile`)
 		.setThumbnail(user.avatar)

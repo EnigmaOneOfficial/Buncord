@@ -1,5 +1,5 @@
 import { ChannelType, Collection, Events, type Message } from "discord.js";
-import { users } from "~/schemas/users";
+import { users } from "~/db/schemas/users";
 import { eq } from "drizzle-orm";
 import { error } from "~/util/log";
 import type { IEvent, IEventExecute } from "../../types/bot";
