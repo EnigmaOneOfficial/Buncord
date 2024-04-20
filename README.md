@@ -44,9 +44,9 @@ Start the bot:
 bun dev
 ```
 
-## Slash Commands
+## Slash Commands: `src/commands`
 
-Register the commands (`src/commands`):
+Register the commands:
 
 ```bash
 bun run bot:register
