@@ -1,4 +1,5 @@
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import type { NonNullableTable } from "../../types/utility";
 
 export const users = sqliteTable("users", {
 	id: text("id").primaryKey(),
@@ -11,3 +12,5 @@ export const users = sqliteTable("users", {
 	currentDungeon: text("current_dungeon").default("None"),
 	highestDungeonLevel: integer("highest_dungeon_level").default(0),
 });
+
+export type IUsers = NonNullableTable<typeof users.$inferSelect>;

@@ -44,3 +44,10 @@ export const trace = (...message: string[]) => {
 		console.trace(`${getTimestamp()} ${message}`);
 	}
 };
+
+export const table = (data: object) => {
+	if (config.debug) {
+		console.log(getTimestamp());
+		console.table(data);
+	}
+};

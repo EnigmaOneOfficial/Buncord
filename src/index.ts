@@ -1,8 +1,8 @@
 import { Glob } from "bun";
 import { Client, Collection, GatewayIntentBits } from "discord.js";
-import { db } from "./db/db";
+import { db } from "./db";
 import "dotenv/config";
-import { error } from "./util/log";
+import { error, log } from "./util/log";
 import type {
 	IClient,
 	ICommand,
@@ -41,6 +41,7 @@ for (const file of new Glob("*.ts").scanSync("./src/commands/")) {
 	commands.set(data.name, { data, onMessage, onInteraction });
 	cooldowns.set(data.name, new Collection());
 }
+log(`Commands: ${commands.map((command) => command.data.name).join(", ")}`);
 
 const events = new Collection<string, IEvent<unknown>>();
 for (const file of new Glob("*.ts").scanSync("./src/events/")) {
@@ -60,6 +61,7 @@ for (const file of new Glob("*.ts").scanSync("./src/events/")) {
 
 	events.set(name, { name, once, execute });
 }
+log(`Events: ${events.map((event) => event.name).join(", ")}`);
 
 bot.commands = commands;
 bot.events = events;

@@ -11,5 +11,5 @@ const db = drizzle(sqlite);
 await migrate(db, { migrationsFolder: "./drizzle" });
 
 log(
-	`${config.database.name}.${config.database.version.toString()}.db: Updated`,
+	`Database: ${config.database.name}.${config.database.version.toString()}.db`,
 );

@@ -2,10 +2,15 @@ import {
 	type ChatInputCommandInteraction,
 	SlashCommandBuilder,
 	EmbedBuilder,
+	ActionRowBuilder,
+	ButtonBuilder,
+	ButtonStyle,
+	ComponentType,
 } from "discord.js";
 import type { ICommand, ICommandData, ICommandExecute } from "../../types/bot";
-import { addItemToInventory, getInventory, getUser } from "~/db/db";
-import type { IUsers } from "../../types/db";
+import { getUser, getInventory, items } from "~/db";
+import type { IInventories } from "~/schemas/inventories";
+import type { IUsers } from "~/schemas/users";
 
 const builder = new SlashCommandBuilder()
 	.setName("profile")
@@ -19,7 +24,7 @@ const data: ICommandData = {
 	aliases: ["p"],
 };
 
-const createProfileEmbed = (user: IUsers) => {
+const createProfileEmbed = (user: IUsers, inventory: IInventories[]) => {
 	const embed = new EmbedBuilder()
 		.setTitle(`${user.username}'s Profile`)
 		.setThumbnail(user.avatar)
@@ -36,10 +41,139 @@ const createProfileEmbed = (user: IUsers) => {
 				inline: false,
 			},
 		)
-		.setColor("#00FF00")
+		.setColor("#FFD700")
 		.setTimestamp();
 
 	return embed;
+};
+
+const createProfileActionRow = () => {
+	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+		new ButtonBuilder()
+			.setCustomId("inventory")
+			.setLabel("Inventory")
+			.setStyle(ButtonStyle.Primary),
+		new ButtonBuilder()
+			.setCustomId("shop")
+			.setLabel("Shop")
+			.setStyle(ButtonStyle.Primary),
+		new ButtonBuilder()
+			.setCustomId("dungeons")
+			.setLabel("Dungeons")
+			.setStyle(ButtonStyle.Primary),
+		new ButtonBuilder()
+			.setCustomId("settings")
+			.setLabel("Settings")
+			.setStyle(ButtonStyle.Primary),
+	);
+
+	return actionRow;
+};
+
+const createInventoryEmbed = (user: IUsers, inventory: IInventories[]) => {
+	const embed = new EmbedBuilder()
+		.setTitle(`${user.username}'s Inventory`)
+		.setColor("#FFD700")
+		.setTimestamp();
+
+	if (inventory.length === 0) {
+		embed.setDescription("Your inventory is empty.");
+	} else {
+		const inventoryList = inventory
+			.map((item) => `${item.details.name} x${item.quantity}`)
+			.join("\n");
+		embed.setDescription(inventoryList);
+	}
+
+	return embed;
+};
+
+const createInventoryActionRow = () => {
+	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+		new ButtonBuilder()
+			.setCustomId("back")
+			.setLabel("Back")
+			.setStyle(ButtonStyle.Secondary),
+	);
+
+	return actionRow;
+};
+
+const createShopEmbed = () => {
+	const embed = new EmbedBuilder()
+		.setTitle("Shop")
+		.setColor("#FFD700")
+		.setTimestamp();
+
+	const shopItems = items
+		.map((item) => `${item.name} - ${item.price} gold`)
+		.join("\n");
+	embed.setDescription(shopItems);
+
+	return embed;
+};
+
+const createShopActionRow = () => {
+	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+		new ButtonBuilder()
+			.setCustomId("back")
+			.setLabel("Back")
+			.setStyle(ButtonStyle.Secondary),
+	);
+
+	return actionRow;
+};
+
+const createDungeonsEmbed = (user: IUsers) => {
+	const embed = new EmbedBuilder()
+		.setTitle("Dungeons")
+		.setColor("#FFD700")
+		.setTimestamp()
+		.addFields(
+			{
+				name: "Current Dungeon",
+				value: user.currentDungeon || "None",
+				inline: false,
+			},
+			{
+				name: "Highest Dungeon Level",
+				value: user.highestDungeonLevel.toString(),
+				inline: false,
+			},
+		);
+
+	return embed;
+};
+
+const createDungeonsActionRow = () => {
+	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+		new ButtonBuilder()
+			.setCustomId("back")
+			.setLabel("Back")
+			.setStyle(ButtonStyle.Secondary),
+	);
+
+	return actionRow;
+};
+
+const createSettingsEmbed = (user: IUsers) => {
+	const embed = new EmbedBuilder()
+		.setTitle(`${user.username}'s Settings`)
+		.setColor("#FFD700")
+		.setTimestamp();
+
+	return embed;
+};
+
+const createSettingsActionRow = () => {
+	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+		new ButtonBuilder()
+			.setCustomId("back")
+			.setLabel("Back")
+			.setStyle(ButtonStyle.Secondary),
+	);
+
+	return actionRow;
 };
 
 const onInteraction: ICommandExecute<ChatInputCommandInteraction> = async (
@@ -49,12 +183,73 @@ const onInteraction: ICommandExecute<ChatInputCommandInteraction> = async (
 	const user = await getUser(interaction.user.id);
 	if (!user) return;
 
-	const embed = createProfileEmbed(user);
-	await interaction.reply({
-		embeds: [embed],
+	const inventory = await getInventory(interaction.user.id);
+	const profileEmbed = createProfileEmbed(user, inventory);
+	const profileActionRow = createProfileActionRow();
+
+	const message = await interaction.reply({
+		embeds: [profileEmbed],
+		components: [profileActionRow],
+		fetchReply: true,
 	});
-	await addItemToInventory(user.id, 1);
-	console.log(await getInventory(user.id));
+
+	const collector = message.createMessageComponentCollector({
+		componentType: ComponentType.Button,
+		time: 60000,
+	});
+
+	collector.on("collect", async (i) => {
+		if (i.user.id !== interaction.user.id) {
+			await i.reply({
+				content: "You cannot use this button.",
+				ephemeral: true,
+			});
+			return;
+		}
+
+		await i.deferUpdate();
+
+		const selectedPage = i.customId;
+
+		let updatedEmbed: EmbedBuilder = profileEmbed;
+		let updatedActionRow: ActionRowBuilder<ButtonBuilder> = profileActionRow;
+
+		switch (selectedPage) {
+			case "inventory":
+				updatedEmbed = createInventoryEmbed(user, inventory);
+				updatedActionRow = createInventoryActionRow();
+				break;
+			case "shop":
+				updatedEmbed = createShopEmbed();
+				updatedActionRow = createShopActionRow();
+				break;
+			case "dungeons":
+				updatedEmbed = createDungeonsEmbed(user);
+				updatedActionRow = createDungeonsActionRow();
+				break;
+			case "settings":
+				updatedEmbed = createSettingsEmbed(user);
+				updatedActionRow = createSettingsActionRow();
+				break;
+			case "back":
+				updatedEmbed = createProfileEmbed(user, inventory);
+				updatedActionRow = createProfileActionRow();
+				break;
+		}
+
+		await interaction.editReply({
+			embeds: [updatedEmbed],
+			components: [updatedActionRow],
+		});
+
+		collector.resetTimer();
+	});
+
+	collector.on("end", async () => {
+		await interaction.editReply({
+			components: [],
+		});
+	});
 };
 
 const profile: ICommand = {

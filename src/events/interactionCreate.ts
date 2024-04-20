@@ -4,10 +4,10 @@ import {
 	Events,
 } from "discord.js";
 import { eq } from "drizzle-orm";
-import { users } from "~/db/schema";
 import { error } from "~/util/log";
 import type { IEvent, IEventExecute } from "../../types/bot";
-import { getUser } from "~/db/db";
+import { getUser } from "~/db";
+import { users } from "~/schemas/users";
 
 const name = Events.InteractionCreate;
 const execute: IEventExecute<ChatInputCommandInteraction> = async (

@@ -8,7 +8,7 @@
 		"bot:register": "bun run src/util/register.ts",
 		"bot:unregister": "bun run src/util/register.ts --delete",
 		"__DB__": "",
-		"db:build": "bun run src/util/generate.ts && bunx drizzle-kit generate:sqlite --schema ./src/db/schema.ts && bun run src/util/migrate.ts",
+		"db:build": "bunx drizzle-kit generate:sqlite --schema ./src/schemas/ && bun run src/util/migrate.ts",
 		"__GITHUB__": "",
 		"git:readme": "git add README.md && git add assets/ && git commit -m 'Update README.md' && git push",
 		"git:general": "git add . && git commit -m 'General updates' && git push",

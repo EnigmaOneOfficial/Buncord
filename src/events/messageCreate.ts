@@ -1,9 +1,9 @@
 import { ChannelType, Collection, Events, type Message } from "discord.js";
-import { users } from "~/db/schemas/users";
+import { users } from "~/schemas/users";
 import { eq } from "drizzle-orm";
 import { error } from "~/util/log";
 import type { IEvent, IEventExecute } from "../../types/bot";
-import { getUser } from "~/db/db";
+import { getUser } from "~/db";
 
 const name = Events.MessageCreate;
 const execute: IEventExecute<Message> = async (client, message) => {
