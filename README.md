@@ -17,11 +17,13 @@
 | <div align="center"><img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/discord.svg" alt="Discord.js Logo" width="64"/></div>    | [Discord.js](https://discord.js.org/)         | Discord API |
 | <div align="center"><img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/drizzle.png" alt="Drizzle Logo" width="28"/></div>       | [Drizzle](https://orm.drizzle.team/)          | Database    |
 | <div align="center"><img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/typescript.png" alt="TypeScript Logo" width="28"/></div> | [TypeScript](https://www.typescriptlang.org/) | Language    |
+| <div align="center"><img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/biome.svg" alt="Biome Logo" width="64"/></div>           | [Biome](https://biomejs.dev/)                 | Linter      |
+
 </div>
 
 ## Quickstart
 
-### Install
+Clone the repo and install dependencies:
 
 ```bash
 git clone https://github.com/EnigmaOneOfficial/Buncord
@@ -29,49 +31,33 @@ cd Buncord
 bun i
 ```
 
-### Environment
-
-Get your [Discord bot token](https://discord.com/developers/applications) and [application ID](https://discord.com/developers/applications) and put them in a `.env` file in the root directory of the project:
+Get your [token and application id](https://discord.com/developers/applications) and put them in a `.env` file in the root directory of the project:
 
 ```env
 TOKEN=your_discord_bot_token
 APPLICATION_ID=your_discord_bot_application_id
 ```
 
-### Run
-
-Start the bot in production mode and build all necessary files:
-
-```bash
-bun start
-```
-
-Start the bot in development mode and watch for changes:
+Start the bot:
 
 ```bash
 bun dev
 ```
 
-### Database
+## Slash Commands
 
-Build the database (`src/schemas`):
-
-```bash
-bun run db:build
-```
-
-### Slash Commands
-
-Register the slash commands (`src/commands`):
+Register the commands (`src/commands`):
 
 ```bash
-# Register to a specific guild: --guild <guild_id>
 bun run bot:register
+# bun run bot:register --guild 1234567890
 ```
 
-Unregister the slash commands:
+Unregister the commands:
 
 ```bash
-# Unregister from a specific guild: --guild <guild_id>
 bun run bot:unregister
+# bun run bot:unregister --guild 1234567890
 ```
+
+*Note: Registration takes about an hour for global commands, and instantly for guild commands.*
