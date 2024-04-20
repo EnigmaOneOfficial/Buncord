@@ -60,4 +60,4 @@ bun run bot:unregister
 # bun run bot:unregister --guild 1234567890
 ```
 
-*Note: Registration takes about an hour for global commands, and is nearly instant for guild commands.*
+*Note: Registration takes about an hour for global - and seconds for guild-specific.*
