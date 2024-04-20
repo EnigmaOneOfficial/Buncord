@@ -27,7 +27,9 @@ APPLICATION_ID=your_discord_bot_application_id
 Start the bot:
 
 ```bash
-bun dev
+bun start
+# To enable hot reloading, run:
+# bun dev
 ```
 
 ## Slash Commands: `src/commands`
@@ -36,6 +38,7 @@ Register the commands:
 
 ```bash
 bun run bot:register
+# To register guild-specific commands, run:
 # bun run bot:register --guild 1234567890
 ```
 
@@ -43,6 +46,7 @@ Unregister the commands:
 
 ```bash
 bun run bot:unregister
+# To unregister guild-specific commands, run:
 # bun run bot:unregister --guild 1234567890
 ```
 
