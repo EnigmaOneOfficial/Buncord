@@ -11,12 +11,12 @@
 
 <div align="center">
 
-| Logo | Name | Context |
-| :----- | :----- | :----- |
-| <div align="center"><img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/bun.png" alt="Bun Logo" width="28"/></div> | [Bun](https://bun.sh/) | Runtime |
-| <div align="center"><img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/discord.svg" alt="Discord.js Logo" width="64"/></div> | [Discord.js](https://discord.js.org/) | Discord API |
-| <div align="center"><img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/drizzle.png" alt="Drizzle Logo" width="28"/></div> | [Drizzle](https://orm.drizzle.team/) | Database |
-| <div align="center"><img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/typescript.png" alt="TypeScript Logo" width="28"/></div> | [TypeScript](https://www.typescriptlang.org/) | Language |
+| Logo                                                                                                                                                             | Name                                          | Context     |
+| :--------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------- | :---------- |
+| <div align="center"><img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/bun.png" alt="Bun Logo" width="28"/></div>               | [Bun](https://bun.sh/)                        | Runtime     |
+| <div align="center"><img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/discord.svg" alt="Discord.js Logo" width="64"/></div>    | [Discord.js](https://discord.js.org/)         | Discord API |
+| <div align="center"><img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/drizzle.png" alt="Drizzle Logo" width="28"/></div>       | [Drizzle](https://orm.drizzle.team/)          | Database    |
+| <div align="center"><img src="https://raw.githubusercontent.com/EnigmaOneOfficial/Buncord/master/assets/typescript.png" alt="TypeScript Logo" width="28"/></div> | [TypeScript](https://www.typescriptlang.org/) | Language    |
 </div>
 
 ## Quickstart
@@ -38,9 +38,23 @@ TOKEN=your_discord_bot_token
 APPLICATION_ID=your_discord_bot_application_id
 ```
 
+### Run
+
+Start the bot in production mode and build all necessary files:
+
+```bash
+bun start
+```
+
+Start the bot in development mode and watch for changes:
+
+```bash
+bun dev
+```
+
 ### Database
 
-Build the database (`src/db/schemas`):
+Build the database (`src/schemas`):
 
 ```bash
 bun run db:build
@@ -60,18 +74,4 @@ Unregister the slash commands:
 ```bash
 # Unregister from a specific guild: --guild <guild_id>
 bun run bot:unregister
-```
-
-### Run
-
-Start with hot reloading:
-
-```bash
-bun dev
-```
-
-Start without hot reloading:
-
-```bash
-bun start
 ```

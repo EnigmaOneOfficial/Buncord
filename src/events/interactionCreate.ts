@@ -7,6 +7,7 @@ import { eq } from "drizzle-orm";
 import { users } from "~/db/schema";
 import { error } from "~/util/log";
 import type { IEvent, IEventExecute } from "../../types/bot";
+import { getUser } from "~/db/db";
 
 const name = Events.InteractionCreate;
 const execute: IEventExecute<ChatInputCommandInteraction> = async (
@@ -16,33 +17,18 @@ const execute: IEventExecute<ChatInputCommandInteraction> = async (
 	const member = interaction.member;
 	if (!member) return;
 
-	let user = await client.db
-		.select()
-		.from(users)
-		.where(eq(users.id, member.user.id))
-		.then((res) => res[0]);
-	if (!user) {
-		user = await client.db
-			.insert(users)
-			.values({
-				id: member.user.id,
-				avatar: member.user.avatar,
-				username: member.user.username,
-				messageCount: 0,
-			})
-			.returning()
-			.then((res) => res[0]);
-	}
-
+	const user = await getUser(interaction.user.id);
 	await client.db
 		.update(users)
 		.set({
-			messageCount: (user?.messageCount || 0) + 1,
+			messageCount: user.messageCount + 1,
+			avatar: interaction.user.avatarURL(),
+			username: member.user.username,
 		})
 		.where(eq(users.id, member.user.id));
 
 	const command = client.commands.get(interaction.commandName);
-	if (!command) return;
+	if (!command || !command.onInteraction) return;
 
 	const { cooldowns } = client;
 	if (!cooldowns.has(command.data.name)) {

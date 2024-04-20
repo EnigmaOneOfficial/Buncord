@@ -41,8 +41,8 @@ export type ICommandExecute<T> = (
 export type ICommand = {
 	data: ICommandData;
 	builder?: Partial<SlashCommandBuilder>;
-	onMessage: ICommandExecute<Message>;
-	onInteraction: ICommandExecute<ChatInputCommandInteraction>;
+	onMessage?: ICommandExecute<Message>;
+	onInteraction?: ICommandExecute<ChatInputCommandInteraction>;
 };
 export type ICommands = Collection<string, ICommand>;
 export type ICooldown = Collection<string, Collection<string, number>>;

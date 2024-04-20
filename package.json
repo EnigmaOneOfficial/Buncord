@@ -1,14 +1,14 @@
 {
 	"name": "app",
-	"version": "1.0.50",
+	"version": "1.0.60",
 	"scripts": {
 		"__BOT__": "",
-		"start": "bun run src/index.ts",
+		"start": "bun run db:build && bun run src/index.ts",
 		"dev": "bun run --watch src/index.ts",
 		"bot:register": "bun run src/util/register.ts",
 		"bot:unregister": "bun run src/util/register.ts --delete",
 		"__DB__": "",
-		"db:build": "bunx drizzle-kit generate:sqlite --schema ./src/db/schema.ts && bun run src/util/migrate.ts",
+		"db:build": "bun run src/util/generate.ts && bunx drizzle-kit generate:sqlite --schema ./src/db/schema.ts && bun run src/util/migrate.ts",
 		"__GITHUB__": "",
 		"git:readme": "git add README.md && git commit -m 'Update README.md' && git push",
 		"git:general": "git add . && git commit -m 'General updates' && git push",

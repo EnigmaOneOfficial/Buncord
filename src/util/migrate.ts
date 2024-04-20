@@ -10,4 +10,6 @@ const sqlite = new Database(
 const db = drizzle(sqlite);
 await migrate(db, { migrationsFolder: "./drizzle" });
 
-log("Database migration complete");
+log(
+	`${config.database.name}.${config.database.version.toString()}.db: Updated`,
+);
