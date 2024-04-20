@@ -4,7 +4,7 @@
   <a href="https://github.com/EnigmaOneOfficial/Buncord/stargazers"><img src="https://img.shields.io/github/stars/EnigmaOneOfficial/Buncord?style=social" alt="Stars Badge"/></a>
   <a href="https://github.com/EnigmaOneOfficial/Buncord/issues"><img src="https://img.shields.io/github/issues/EnigmaOneOfficial/Buncord" alt="Issues Badge"/></a>
   <br>
-  <b>Discord bot template focused on simplicity, reliability, and modularity.</b>
+  <b>Simple, Reliable, Beautiful</b>
 </div>
 
 ## Stack
