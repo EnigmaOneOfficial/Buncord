@@ -50,7 +50,7 @@ bun run bot:unregister
 # bun run bot:unregister --guild 1234567890
 ```
 
-*Note: Registration takes about an hour for global - and seconds for guild-specific.*
+*Note: Registration takes about an hour for global slash commands - and seconds for guild-specific slash commands.*
 
 ## Stack
 
