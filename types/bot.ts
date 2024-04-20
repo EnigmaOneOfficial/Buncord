@@ -15,10 +15,11 @@ export type IClient = Client & {
 	db: typeof db;
 };
 
+export type IEventExecute<T> = (client: IClient, ...args: T[]) => void;
 export type IEvent<T> = {
 	name: string;
 	once?: boolean;
-	execute: (client: IClient, ...args: T[]) => void;
+	execute: IEventExecute<T>;
 };
 
 export type IEvents = Collection<string, IEvent<unknown>>;
@@ -40,8 +41,8 @@ export type ICommandExecute<T> = (
 export type ICommand = {
 	data: ICommandData;
 	builder?: Partial<SlashCommandBuilder>;
-	onMessage: ICommandExecute<Message>;
-	onInteraction: ICommandExecute<ChatInputCommandInteraction>;
+	onMessage?: ICommandExecute<Message>;
+	onInteraction?: ICommandExecute<ChatInputCommandInteraction>;
 };
 export type ICommands = Collection<string, ICommand>;
 export type ICooldown = Collection<string, Collection<string, number>>;
