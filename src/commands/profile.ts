@@ -4,7 +4,7 @@ import {
 	ComponentType,
 } from "discord.js";
 import type { ICommand, ICommandData, ICommandExecute } from "../../types/bot";
-import { getInventory, getUser, items } from "~/db";
+import { getUser } from "~/db";
 import { handleMarketInteraction } from "~/components/market";
 import { handleStatsInteraction } from "~/components/stats";
 import { handleInventoryInteraction } from "~/components/inventory";
@@ -15,23 +15,25 @@ import {
 import { handleTowerInteraction } from "~/components/tower";
 import { handleSettingsInteraction } from "~/components/settings";
 import { handleAchievementsInteraction } from "~/components/achievements";
-import { handleItemInteraction } from "~/components/inventory_item";
 import { handleLootboxInteraction } from "~/components/lootbox";
-import { handleShopInteraction, shop_items } from "~/components/shop";
+import { handleShopInteraction } from "~/components/shop";
 import { handleOpenLootboxInteraction } from "~/components/open_lootbox";
-import type { IInventories, IItem } from "~/schemas/inventories";
+import type { IItem } from "~/schemas/inventories";
 import { handleShopItemInteraction } from "~/components/shop_item";
-import { handleUnavailableInteraction } from "~/components/unavailable";
-
-const builder = new SlashCommandBuilder()
-	.setName("profile")
-	.setDescription("Displays your profile information.");
+import { handleBuyItemInteraction } from "~/components/buy_item";
+import { handleInventoryItemInteraction } from "~/components/inventory_item";
+import { handleEquipItemInteraction } from "~/components/equip_item";
+import { handleUnequipItemInteraction } from "~/components/unequip_item";
 
 const data: ICommandData = {
 	name: "profile",
 	description: "Displays your profile information.",
 	cooldown: 5,
 };
+
+const builder = new SlashCommandBuilder()
+	.setName(data.name)
+	.setDescription(data.description);
 
 const onInteraction: ICommandExecute<ChatInputCommandInteraction> = async (
 	client,
@@ -60,7 +62,8 @@ const onInteraction: ICommandExecute<ChatInputCommandInteraction> = async (
 	});
 
 	let inventoryPage = 0;
-	let selectedInventoryItem: IInventories | undefined = undefined;
+	let shopPage = 0;
+	let selectedInventoryItem: IItem | undefined = undefined;
 	let selectedShopItem: IItem | undefined = undefined;
 	collector.on("collect", async (buttonInteraction) => {
 		if (buttonInteraction.user.id !== interaction.user.id) {
@@ -91,11 +94,17 @@ const onInteraction: ICommandExecute<ChatInputCommandInteraction> = async (
 				inventoryPage--;
 				handleInventoryInteraction(buttonInteraction, inventoryPage);
 				break;
-			case "equip":
-				// TODO
+			case "inventory_select":
+				handleInventoryItemInteraction(
+					buttonInteraction,
+					selectedInventoryItem,
+				);
 				break;
-			case "unequip":
-				// TODO
+			case "equip_item":
+				handleEquipItemInteraction(buttonInteraction, selectedInventoryItem);
+				break;
+			case "unequip_item":
+				handleUnequipItemInteraction(buttonInteraction, selectedInventoryItem);
 				break;
 			case "market":
 				handleMarketInteraction(buttonInteraction);
@@ -107,13 +116,27 @@ const onInteraction: ICommandExecute<ChatInputCommandInteraction> = async (
 				handleOpenLootboxInteraction(buttonInteraction);
 				break;
 			case "shop":
-				handleShopInteraction(buttonInteraction);
+				handleShopInteraction(buttonInteraction, shopPage);
+				break;
+			case "shop_next_page":
+				shopPage++;
+				handleShopInteraction(buttonInteraction, shopPage);
+				break;
+			case "shop_previous_page":
+				shopPage--;
+				handleShopInteraction(buttonInteraction, shopPage);
+				break;
+			case "shop_select":
+				handleShopItemInteraction(buttonInteraction, selectedShopItem);
 				break;
 			case "buy_item":
-				// TODO
+				handleBuyItemInteraction(buttonInteraction, selectedShopItem);
 				break;
 			case "tower":
 				handleTowerInteraction(buttonInteraction);
+				break;
+			case "enter_tower":
+				// TODO
 				break;
 			case "leaderboard":
 				// TODO
@@ -147,7 +170,7 @@ const onInteraction: ICommandExecute<ChatInputCommandInteraction> = async (
 		switch (selectionInteraction.customId) {
 			case "inventory_select": {
 				selectedInventoryItem =
-					await handleItemInteraction(selectionInteraction);
+					await handleInventoryItemInteraction(selectionInteraction);
 				break;
 			}
 			case "shop_select": {

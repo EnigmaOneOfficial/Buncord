@@ -11,12 +11,9 @@ import type { IUsers } from "~/schemas/users";
 export const createAchievementsEmbed = (user: IUsers) => {
 	const embed = new EmbedBuilder()
 		.setTitle(`${user.username}'s Achievements`)
+		.setDescription("Achievements are coming soon!")
 		.setColor("#FFD700")
 		.setTimestamp();
-
-	// Placeholder for the list of achievements
-	const achievementsList = "- Achievement 1\n- Achievement 2\n- Achievement 3";
-	embed.setDescription(achievementsList);
 
 	return embed;
 };

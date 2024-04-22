@@ -20,18 +20,6 @@ export const createSettingsEmbed = (user: IUsers) => {
 export const createSettingsActionRow = () => {
 	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
 		new ButtonBuilder()
-			.setCustomId("customize_profile")
-			.setLabel("Customize Profile")
-			.setStyle(ButtonStyle.Primary),
-		new ButtonBuilder()
-			.setCustomId("notifications")
-			.setLabel("Notifications")
-			.setStyle(ButtonStyle.Primary),
-		new ButtonBuilder()
-			.setCustomId("sound_effects")
-			.setLabel("Sound Effects")
-			.setStyle(ButtonStyle.Primary),
-		new ButtonBuilder()
 			.setCustomId("home")
 			.setLabel("Back")
 			.setStyle(ButtonStyle.Secondary),

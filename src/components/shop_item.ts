@@ -1,14 +1,18 @@
 import {
 	ActionRowBuilder,
 	ButtonBuilder,
+	type ButtonInteraction,
 	ButtonStyle,
 	EmbedBuilder,
-	type StringSelectMenuInteraction,
+	StringSelectMenuInteraction,
 } from "discord.js";
 import { items } from "~/db";
 import type { IItem } from "~/schemas/inventories";
-import { handleUnavailableInteraction } from "./unavailable";
 import { shop_items } from "./shop";
+import {
+	createBuyItemNotExistActionRow,
+	createBuyItemNotExistEmbed,
+} from "./buy_item";
 
 export const createShopItemEmbed = (item: IItem) => {
 	const embed = new EmbedBuilder()
@@ -47,11 +51,18 @@ export const createShopItemActionRow = () => {
 };
 
 export const handleShopItemInteraction = async (
-	interaction: StringSelectMenuInteraction,
+	interaction: StringSelectMenuInteraction | ButtonInteraction,
+	selectedItem?: IItem,
 ) => {
-	const item = items.find((item) => item.id === Number(interaction.values[0]));
+	const item =
+		interaction instanceof StringSelectMenuInteraction
+			? items.find((item) => item.id === Number(interaction.values[0]))
+			: selectedItem;
 	if (!item) {
-		await handleUnavailableInteraction(interaction);
+		await interaction.editReply({
+			embeds: [createBuyItemNotExistEmbed()],
+			components: [createBuyItemNotExistActionRow()],
+		});
 	} else {
 		await interaction.editReply({
 			embeds: [createShopItemEmbed(item)],
