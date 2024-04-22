@@ -1,16 +1,29 @@
 import {
 	type ChatInputCommandInteraction,
 	SlashCommandBuilder,
-	EmbedBuilder,
-	ActionRowBuilder,
-	ButtonBuilder,
-	ButtonStyle,
 	ComponentType,
 } from "discord.js";
 import type { ICommand, ICommandData, ICommandExecute } from "../../types/bot";
-import { getUser, getInventory, items } from "~/db";
-import type { IInventories } from "~/schemas/inventories";
-import type { IUsers } from "~/schemas/users";
+import { getInventory, getUser, items } from "~/db";
+import { handleMarketInteraction } from "~/components/market";
+import { handleStatsInteraction } from "~/components/stats";
+import { handleInventoryInteraction } from "~/components/inventory";
+import {
+	createProfileEmbed,
+	createProfileActionRow,
+} from "~/components/profile";
+import { handleTowerInteraction } from "~/components/tower";
+import { handleSettingsInteraction } from "~/components/settings";
+import { handleAchievementsInteraction } from "~/components/achievements";
+import { handleItemInteraction } from "~/components/inventory_item";
+import { handleLootboxInteraction } from "~/components/lootbox";
+import {
+	handleRegularShopInteraction,
+	regular_shop_items,
+} from "~/components/regular_shop";
+import { handleOpenLootboxInteraction } from "~/components/open_lootbox";
+import type { IInventories, IItem } from "~/schemas/inventories";
+import { handleShopItemInteraction } from "~/components/shop_item";
 
 const builder = new SlashCommandBuilder()
 	.setName("profile")
@@ -19,149 +32,7 @@ const builder = new SlashCommandBuilder()
 const data: ICommandData = {
 	name: "profile",
 	description: "Displays your profile information.",
-	usage: "!profile",
 	cooldown: 5,
-	aliases: ["p"],
-};
-
-const createProfileEmbed = (user: IUsers, inventory: IInventories[]) => {
-	const embed = new EmbedBuilder()
-		.setTitle(`${user.username}'s Profile`)
-		.setThumbnail(user.avatar)
-		.addFields({ name: "Level", value: user.level.toString(), inline: true })
-		.setColor("#FFD700")
-		.setTimestamp();
-
-	return embed;
-};
-
-const createProfileActionRow = () => {
-	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-		new ButtonBuilder()
-			.setCustomId("inventory")
-			.setLabel("Inventory")
-			.setStyle(ButtonStyle.Primary),
-		new ButtonBuilder()
-			.setCustomId("shop")
-			.setLabel("Shop")
-			.setStyle(ButtonStyle.Primary),
-		new ButtonBuilder()
-			.setCustomId("dungeons")
-			.setLabel("Dungeons")
-			.setStyle(ButtonStyle.Primary),
-		new ButtonBuilder()
-			.setCustomId("settings")
-			.setLabel("Settings")
-			.setStyle(ButtonStyle.Primary),
-	);
-
-	return actionRow;
-};
-
-const createInventoryEmbed = (user: IUsers, inventory: IInventories[]) => {
-	const embed = new EmbedBuilder()
-		.setTitle(`${user.username}'s Inventory`)
-		.setColor("#FFD700")
-		.setTimestamp();
-
-	if (inventory.length === 0) {
-		embed.setDescription("Your inventory is empty.");
-	} else {
-		const inventoryList = inventory
-			.map((item) => `${item.details.name} x${item.quantity}`)
-			.join("\n");
-		embed.setDescription(inventoryList);
-	}
-
-	return embed;
-};
-
-const createInventoryActionRow = () => {
-	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-		new ButtonBuilder()
-			.setCustomId("back")
-			.setLabel("Back")
-			.setStyle(ButtonStyle.Secondary),
-	);
-
-	return actionRow;
-};
-
-const createShopEmbed = () => {
-	const embed = new EmbedBuilder()
-		.setTitle("Shop")
-		.setColor("#FFD700")
-		.setTimestamp();
-
-	const shopItems = items
-		.map((item) => `${item.name} - ${item.price} gold`)
-		.join("\n");
-	embed.setDescription(shopItems);
-
-	return embed;
-};
-
-const createShopActionRow = () => {
-	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-		new ButtonBuilder()
-			.setCustomId("back")
-			.setLabel("Back")
-			.setStyle(ButtonStyle.Secondary),
-	);
-
-	return actionRow;
-};
-
-const createDungeonsEmbed = (user: IUsers) => {
-	const embed = new EmbedBuilder()
-		.setTitle("Dungeons")
-		.setColor("#FFD700")
-		.setTimestamp()
-		.addFields(
-			{
-				name: "Current Dungeon",
-				value: user.currentDungeon || "None",
-				inline: false,
-			},
-			{
-				name: "Highest Dungeon Level",
-				value: user.highestDungeonLevel.toString(),
-				inline: false,
-			},
-		);
-
-	return embed;
-};
-
-const createDungeonsActionRow = () => {
-	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-		new ButtonBuilder()
-			.setCustomId("back")
-			.setLabel("Back")
-			.setStyle(ButtonStyle.Secondary),
-	);
-
-	return actionRow;
-};
-
-const createSettingsEmbed = (user: IUsers) => {
-	const embed = new EmbedBuilder()
-		.setTitle(`${user.username}'s Settings`)
-		.setColor("#FFD700")
-		.setTimestamp();
-
-	return embed;
-};
-
-const createSettingsActionRow = () => {
-	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-		new ButtonBuilder()
-			.setCustomId("back")
-			.setLabel("Back")
-			.setStyle(ButtonStyle.Secondary),
-	);
-
-	return actionRow;
 };
 
 const onInteraction: ICommandExecute<ChatInputCommandInteraction> = async (
@@ -171,8 +42,7 @@ const onInteraction: ICommandExecute<ChatInputCommandInteraction> = async (
 	const user = await getUser(interaction.user.id);
 	if (!user) return;
 
-	const inventory = await getInventory(interaction.user.id);
-	const profileEmbed = createProfileEmbed(user, inventory);
+	const profileEmbed = createProfileEmbed(user);
 	const profileActionRow = createProfileActionRow();
 
 	const message = await interaction.reply({
@@ -186,51 +56,117 @@ const onInteraction: ICommandExecute<ChatInputCommandInteraction> = async (
 		time: 60000,
 	});
 
-	collector.on("collect", async (i) => {
-		if (i.user.id !== interaction.user.id) {
-			await i.reply({
+	const selectionCollector = message.createMessageComponentCollector({
+		componentType: ComponentType.StringSelect,
+		time: 60000,
+	});
+
+	let inventoryPage = 0;
+	let selectedInventoryItem: IInventories | undefined = undefined;
+	let selectedShopItem: IItem | undefined = undefined;
+	collector.on("collect", async (buttonInteraction) => {
+		if (buttonInteraction.user.id !== interaction.user.id) {
+			await buttonInteraction.reply({
 				content: "You cannot use this button.",
 				ephemeral: true,
 			});
 			return;
 		}
 
-		await i.deferUpdate();
+		await buttonInteraction.deferUpdate();
 
-		const selectedPage = i.customId;
+		const handlers = {
+			stats: async () => handleStatsInteraction(buttonInteraction, user),
+			achievements: async () =>
+				handleAchievementsInteraction(buttonInteraction, user),
+			inventory: async () =>
+				handleInventoryInteraction(buttonInteraction, user, inventoryPage),
+			inventory_next_page: async () => {
+				inventoryPage++;
+				await handleInventoryInteraction(
+					buttonInteraction,
+					user,
+					inventoryPage,
+				);
+			},
+			inventory_previous_page: async () => {
+				inventoryPage--;
+				await handleInventoryInteraction(
+					buttonInteraction,
+					user,
+					inventoryPage,
+				);
+			},
+			market: async () => handleMarketInteraction(buttonInteraction),
+			lootboxes: async () => handleLootboxInteraction(buttonInteraction),
+			open_lootbox: async () =>
+				handleOpenLootboxInteraction(buttonInteraction, user),
+			regular_shop: async () => handleRegularShopInteraction(buttonInteraction),
+			tower: async () => handleTowerInteraction(buttonInteraction, user),
+			settings: async () => handleSettingsInteraction(buttonInteraction, user),
+			home: async () => {
+				await interaction.editReply({
+					embeds: [createProfileEmbed(user)],
+					components: [createProfileActionRow()],
+				});
+			},
+		};
 
-		let updatedEmbed: EmbedBuilder = profileEmbed;
-		let updatedActionRow: ActionRowBuilder<ButtonBuilder> = profileActionRow;
-
-		switch (selectedPage) {
-			case "inventory":
-				updatedEmbed = createInventoryEmbed(user, inventory);
-				updatedActionRow = createInventoryActionRow();
-				break;
-			case "shop":
-				updatedEmbed = createShopEmbed();
-				updatedActionRow = createShopActionRow();
-				break;
-			case "dungeons":
-				updatedEmbed = createDungeonsEmbed(user);
-				updatedActionRow = createDungeonsActionRow();
-				break;
-			case "settings":
-				updatedEmbed = createSettingsEmbed(user);
-				updatedActionRow = createSettingsActionRow();
-				break;
-			case "back":
-				updatedEmbed = createProfileEmbed(user, inventory);
-				updatedActionRow = createProfileActionRow();
-				break;
+		const handler =
+			handlers[buttonInteraction.customId as keyof typeof handlers];
+		if (handler) {
+			await handler();
 		}
 
-		await interaction.editReply({
-			embeds: [updatedEmbed],
-			components: [updatedActionRow],
-		});
-
 		collector.resetTimer();
+		selectionCollector.resetTimer();
+	});
+
+	selectionCollector.on("collect", async (selectionInteraction) => {
+		if (selectionInteraction.user.id !== interaction.user.id) {
+			await selectionInteraction.reply({
+				content: "You cannot use this select menu.",
+				ephemeral: true,
+			});
+			return;
+		}
+
+		await selectionInteraction.deferUpdate();
+
+		const handlers = {
+			inventory_select: async () => {
+				const inventory = await getInventory(user.id);
+				const item = inventory.find(
+					(item) => item.id === Number(selectionInteraction.values[0]),
+				);
+				if (!item) return;
+
+				selectedInventoryItem = item;
+				await handleItemInteraction(
+					selectionInteraction,
+					selectedInventoryItem,
+				);
+			},
+			regular_shop_select: async () => {
+				const item = items.find(
+					(item) => item.id === Number(selectionInteraction.values[0]),
+				);
+				if (!item) return;
+
+				selectedShopItem = item;
+				await handleShopItemInteraction(
+					selectionInteraction,
+					selectedShopItem,
+					regular_shop_items.find((i) => i.id === item.id)?.price || 0,
+				);
+			},
+		};
+
+		const handler =
+			handlers[selectionInteraction.customId as keyof typeof handlers];
+		if (handler) {
+			await handler();
+		}
 	});
 
 	collector.on("end", async () => {

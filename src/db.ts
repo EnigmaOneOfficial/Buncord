@@ -3,7 +3,7 @@ import { Database } from "bun:sqlite";
 import config from "./config";
 import { eq } from "drizzle-orm";
 import { Glob } from "bun";
-import { error } from "~/util/log";
+import { error, log } from "~/util/log";
 import { Collection } from "discord.js";
 import {
 	DefaultItem,
@@ -55,6 +55,8 @@ for (const file of new Glob("*.ts").scanSync("src/items/")) {
 	items.set(item.id, item);
 }
 
+log(`Items: ${items.size}`);
+
 export const getInventory = async (userId: string) => {
 	const inventory = (await db
 		.select()
@@ -74,13 +76,13 @@ export const addItemToInventory = async (userId: string, itemId: number) => {
 	const inventory = await getInventory(userId);
 	const item = inventory.find((i) => i.itemId === itemId);
 	if (item?.details?.stackable) {
-		await db
+		return await db
 			.update(inventories)
 			.set({ quantity: item.quantity + 1 })
-			.where(eq(inventories.userId, userId) && eq(inventories.itemId, itemId));
-	} else {
-		await db.insert(inventories).values({ userId, itemId }).returning();
+			.where(eq(inventories.userId, userId) && eq(inventories.itemId, itemId))
+			.returning();
 	}
+	return await db.insert(inventories).values({ userId, itemId }).returning();
 };
 
 export const removeItemFromInventory = async (

@@ -1,4 +1,5 @@
 import type {
+	ButtonInteraction,
 	ChatInputCommandInteraction,
 	Client,
 	Collection,
@@ -7,7 +8,8 @@ import type {
 	SlashCommandBuilder,
 } from "discord.js";
 import type { db } from "~/db";
-import type { PrimitiveTable } from "./utility";
+import type { IInventories } from "~/schemas/inventories";
+import type { IUsers } from "~/schemas/users";
 
 export type IClient = Client & {
 	commands: ICommands;
@@ -29,7 +31,7 @@ export type ICommandData = {
 	name: string;
 	description: string;
 	aliases?: string[];
-	usage: string;
+	usage?: string;
 	cooldown?: number;
 	permissions?: PermissionResolvable[];
 };
