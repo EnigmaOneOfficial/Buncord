@@ -6,7 +6,7 @@ import {
 	StringSelectMenuBuilder,
 	type ButtonInteraction,
 } from "discord.js";
-import { getInventory } from "~/db";
+import { getInventory, getUser } from "~/db";
 import type { IInventories } from "~/schemas/inventories";
 import type { IUsers } from "~/schemas/users";
 
@@ -92,9 +92,9 @@ export const createInventorySelectionRow = (
 
 export const handleInventoryInteraction = async (
 	interaction: ButtonInteraction,
-	user: IUsers,
 	page: number,
 ) => {
+	const user = await getUser(interaction.user.id);
 	const inventory = await getInventory(user.id);
 	await interaction.editReply({
 		embeds: [createInventoryEmbed(user, inventory, page)],

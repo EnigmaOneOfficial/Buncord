@@ -18,8 +18,8 @@ export const createMarketEmbed = () => {
 export const createMarketActionRow = () => {
 	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
 		new ButtonBuilder()
-			.setCustomId("regular_shop")
-			.setLabel("Regular Shop")
+			.setCustomId("shop")
+			.setLabel("Shop")
 			.setStyle(ButtonStyle.Primary),
 		new ButtonBuilder()
 			.setCustomId("lootboxes")

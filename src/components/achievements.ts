@@ -5,6 +5,7 @@ import {
 	ButtonStyle,
 	EmbedBuilder,
 } from "discord.js";
+import { getUser } from "~/db";
 import type { IUsers } from "~/schemas/users";
 
 export const createAchievementsEmbed = (user: IUsers) => {
@@ -33,8 +34,8 @@ export const createAchievementsActionRow = () => {
 
 export const handleAchievementsInteraction = async (
 	interaction: ButtonInteraction,
-	user: IUsers,
 ) => {
+	const user = await getUser(interaction.user.id);
 	await interaction.editReply({
 		embeds: [createAchievementsEmbed(user)],
 		components: [createAchievementsActionRow()],

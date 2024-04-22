@@ -5,6 +5,7 @@ import {
 	ButtonStyle,
 	EmbedBuilder,
 } from "discord.js";
+import { getUser } from "~/db";
 import type { IUsers } from "~/schemas/users";
 
 export const createTowerEmbed = (user: IUsers) => {
@@ -49,8 +50,8 @@ export const createTowerActionRow = () => {
 
 export const handleTowerInteraction = async (
 	interaction: ButtonInteraction,
-	user: IUsers,
 ) => {
+	const user = await getUser(interaction.user.id);
 	await interaction.editReply({
 		embeds: [createTowerEmbed(user)],
 		components: [createTowerActionRow()],

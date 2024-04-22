@@ -5,6 +5,7 @@ import {
 	ButtonStyle,
 	EmbedBuilder,
 } from "discord.js";
+import { getUser } from "~/db";
 import type { IUsers } from "~/schemas/users";
 
 export const createStatsEmbed = (user: IUsers) => {
@@ -25,7 +26,7 @@ export const createStatsActionRow = () => {
 		new ButtonBuilder()
 			.setCustomId("achievements")
 			.setLabel("Achievements")
-			.setStyle(ButtonStyle.Secondary),
+			.setStyle(ButtonStyle.Primary),
 		new ButtonBuilder()
 			.setCustomId("home")
 			.setLabel("Back")
@@ -37,8 +38,8 @@ export const createStatsActionRow = () => {
 
 export const handleStatsInteraction = async (
 	interaction: ButtonInteraction,
-	user: IUsers,
 ) => {
+	const user = await getUser(interaction.user.id);
 	await interaction.editReply({
 		embeds: [createStatsEmbed(user)],
 		components: [createStatsActionRow()],

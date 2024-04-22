@@ -5,6 +5,7 @@ import {
 	ButtonStyle,
 	type ButtonInteraction,
 } from "discord.js";
+import { getUser } from "~/db";
 import type { IUsers } from "~/schemas/users";
 
 export const createSettingsEmbed = (user: IUsers) => {
@@ -41,8 +42,8 @@ export const createSettingsActionRow = () => {
 
 export const handleSettingsInteraction = async (
 	interaction: ButtonInteraction,
-	user: IUsers,
 ) => {
+	const user = await getUser(interaction.user.id);
 	await interaction.editReply({
 		embeds: [createSettingsEmbed(user)],
 		components: [createSettingsActionRow()],

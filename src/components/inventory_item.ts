@@ -6,6 +6,8 @@ import {
 	type StringSelectMenuInteraction,
 } from "discord.js";
 import type { IInventories } from "~/schemas/inventories";
+import { handleUnavailableInteraction } from "./unavailable";
+import { getInventory } from "~/db";
 
 export const createItemEmbed = (item: IInventories) => {
 	const embed = new EmbedBuilder()
@@ -18,14 +20,14 @@ export const createItemEmbed = (item: IInventories) => {
 	return embed;
 };
 
-export const createItemActionRow = (item: IInventories) => {
+export const createItemActionRow = () => {
 	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
 		new ButtonBuilder()
-			.setCustomId(`equip_${item.id}`)
+			.setCustomId("equip_item")
 			.setLabel("Equip")
 			.setStyle(ButtonStyle.Primary),
 		new ButtonBuilder()
-			.setCustomId(`unequip_${item.id}`)
+			.setCustomId("unequip_item")
 			.setLabel("Unequip")
 			.setStyle(ButtonStyle.Secondary),
 		new ButtonBuilder()
@@ -39,13 +41,17 @@ export const createItemActionRow = (item: IInventories) => {
 
 export const handleItemInteraction = async (
 	interaction: StringSelectMenuInteraction,
-	item?: IInventories,
 ) => {
+	const inventory = await getInventory(interaction.user.id);
+	const item = inventory.find((i) => i.id === Number(interaction.values[0]));
 	if (!item) {
-		return;
+		await handleUnavailableInteraction(interaction);
+	} else {
+		await interaction.editReply({
+			embeds: [createItemEmbed(item)],
+			components: [createItemActionRow()],
+		});
 	}
-	await interaction.editReply({
-		embeds: [createItemEmbed(item)],
-		components: [createItemActionRow(item)],
-	});
+
+	return item;
 };

@@ -7,7 +7,7 @@ import {
 	StringSelectMenuBuilder,
 } from "discord.js";
 
-export const regular_shop_items = [
+export const shop_items = [
 	{
 		name: "Item 1",
 		id: 1,
@@ -20,20 +20,18 @@ export const regular_shop_items = [
 	},
 	{
 		name: "Item 3",
-		id: 3,
+		id: 8,
 		price: 300,
 	},
 ];
 
-export const createRegularShopEmbed = () => {
+export const createShopEmbed = () => {
 	const embed = new EmbedBuilder()
-		.setTitle("Regular Shop")
+		.setTitle(" Shop")
 		.setColor("#FFD700")
-		.setDescription(
-			"Welcome to the regular shop! Here you can buy regular items.",
-		)
+		.setDescription("Welcome to the  shop! Here you can buy  items.")
 		.addFields(
-			regular_shop_items.map((item) => ({
+			shop_items.map((item) => ({
 				name: item.name,
 				value: `${item.price} coins`,
 			})),
@@ -43,7 +41,7 @@ export const createRegularShopEmbed = () => {
 	return embed;
 };
 
-export const createRegularShopActionRow = () => {
+export const createShopActionRow = () => {
 	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
 		new ButtonBuilder()
 			.setCustomId("market")
@@ -54,12 +52,12 @@ export const createRegularShopActionRow = () => {
 	return actionRow;
 };
 
-export const createRegularShopSelectionRow = () => {
+export const createShopSelectionRow = () => {
 	const selectMenu = new StringSelectMenuBuilder()
-		.setCustomId("regular_shop_select")
+		.setCustomId("_shop_select")
 		.setPlaceholder("Select an item to buy")
 		.addOptions(
-			regular_shop_items.map((item) => ({
+			shop_items.map((item) => ({
 				label: item.name,
 				value: item.id.toString(),
 			})),
@@ -70,11 +68,9 @@ export const createRegularShopSelectionRow = () => {
 	);
 };
 
-export const handleRegularShopInteraction = async (
-	interaction: ButtonInteraction,
-) => {
+export const handleShopInteraction = async (interaction: ButtonInteraction) => {
 	await interaction.editReply({
-		embeds: [createRegularShopEmbed()],
-		components: [createRegularShopActionRow(), createRegularShopSelectionRow()],
+		embeds: [createShopEmbed()],
+		components: [createShopActionRow(), createShopSelectionRow()],
 	});
 };

@@ -17,13 +17,11 @@ import { handleSettingsInteraction } from "~/components/settings";
 import { handleAchievementsInteraction } from "~/components/achievements";
 import { handleItemInteraction } from "~/components/inventory_item";
 import { handleLootboxInteraction } from "~/components/lootbox";
-import {
-	handleRegularShopInteraction,
-	regular_shop_items,
-} from "~/components/regular_shop";
+import { handleShopInteraction, shop_items } from "~/components/shop";
 import { handleOpenLootboxInteraction } from "~/components/open_lootbox";
 import type { IInventories, IItem } from "~/schemas/inventories";
 import { handleShopItemInteraction } from "~/components/shop_item";
+import { handleUnavailableInteraction } from "~/components/unavailable";
 
 const builder = new SlashCommandBuilder()
 	.setName("profile")
@@ -75,50 +73,60 @@ const onInteraction: ICommandExecute<ChatInputCommandInteraction> = async (
 
 		await buttonInteraction.deferUpdate();
 
-		const handlers = {
-			stats: async () => handleStatsInteraction(buttonInteraction, user),
-			achievements: async () =>
-				handleAchievementsInteraction(buttonInteraction, user),
-			inventory: async () =>
-				handleInventoryInteraction(buttonInteraction, user, inventoryPage),
-			inventory_next_page: async () => {
+		switch (buttonInteraction.customId) {
+			case "stats":
+				handleStatsInteraction(buttonInteraction);
+				break;
+			case "achievements":
+				handleAchievementsInteraction(buttonInteraction);
+				break;
+			case "inventory":
+				handleInventoryInteraction(buttonInteraction, inventoryPage);
+				break;
+			case "inventory_next_page":
 				inventoryPage++;
-				await handleInventoryInteraction(
-					buttonInteraction,
-					user,
-					inventoryPage,
-				);
-			},
-			inventory_previous_page: async () => {
+				handleInventoryInteraction(buttonInteraction, inventoryPage);
+				break;
+			case "inventory_previous_page":
 				inventoryPage--;
-				await handleInventoryInteraction(
-					buttonInteraction,
-					user,
-					inventoryPage,
-				);
-			},
-			equip: async () => {}, // TODO
-			unequip: async () => {}, // TODO
-			market: async () => handleMarketInteraction(buttonInteraction),
-			lootboxes: async () => handleLootboxInteraction(buttonInteraction),
-			open_lootbox: async () =>
-				handleOpenLootboxInteraction(buttonInteraction, user),
-			regular_shop: async () => handleRegularShopInteraction(buttonInteraction),
-			buy_item: async () => {}, // TODO
-			tower: async () => handleTowerInteraction(buttonInteraction, user),
-			settings: async () => handleSettingsInteraction(buttonInteraction, user),
-			home: async () => {
+				handleInventoryInteraction(buttonInteraction, inventoryPage);
+				break;
+			case "equip":
+				// TODO
+				break;
+			case "unequip":
+				// TODO
+				break;
+			case "market":
+				handleMarketInteraction(buttonInteraction);
+				break;
+			case "lootboxes":
+				handleLootboxInteraction(buttonInteraction);
+				break;
+			case "open_lootbox":
+				handleOpenLootboxInteraction(buttonInteraction);
+				break;
+			case "shop":
+				handleShopInteraction(buttonInteraction);
+				break;
+			case "buy_item":
+				// TODO
+				break;
+			case "tower":
+				handleTowerInteraction(buttonInteraction);
+				break;
+			case "leaderboard":
+				// TODO
+				break;
+			case "settings":
+				handleSettingsInteraction(buttonInteraction);
+				break;
+			case "home":
 				await interaction.editReply({
 					embeds: [createProfileEmbed(user)],
 					components: [createProfileActionRow()],
 				});
-			},
-		};
-
-		const handler =
-			handlers[buttonInteraction.customId as keyof typeof handlers];
-		if (handler) {
-			await handler();
+				break;
 		}
 
 		collector.resetTimer();
@@ -136,46 +144,22 @@ const onInteraction: ICommandExecute<ChatInputCommandInteraction> = async (
 
 		await selectionInteraction.deferUpdate();
 
-		const handlers = {
-			inventory_select: async () => {
-				const inventory = await getInventory(user.id);
-				const item = inventory.find(
-					(item) => item.id === Number(selectionInteraction.values[0]),
-				);
-				if (!item) return;
-
-				selectedInventoryItem = item;
-				await handleItemInteraction(
-					selectionInteraction,
-					selectedInventoryItem,
-				);
-			},
-			regular_shop_select: async () => {
-				const item = items.find(
-					(item) => item.id === Number(selectionInteraction.values[0]),
-				);
-				if (!item) return;
-
-				selectedShopItem = item;
-				await handleShopItemInteraction(
-					selectionInteraction,
-					selectedShopItem,
-					regular_shop_items.find((i) => i.id === item.id)?.price || 0,
-				);
-			},
-		};
-
-		const handler =
-			handlers[selectionInteraction.customId as keyof typeof handlers];
-		if (handler) {
-			await handler();
+		switch (selectionInteraction.customId) {
+			case "inventory_select": {
+				selectedInventoryItem =
+					await handleItemInteraction(selectionInteraction);
+				break;
+			}
+			case "shop_select": {
+				selectedShopItem =
+					await handleShopItemInteraction(selectionInteraction);
+				break;
+			}
 		}
 	});
 
 	collector.on("end", async () => {
-		await interaction.editReply({
-			components: [],
-		});
+		await interaction.deleteReply();
 	});
 };
 
