@@ -97,11 +97,14 @@ const onInteraction: ICommandExecute<ChatInputCommandInteraction> = async (
 					inventoryPage,
 				);
 			},
+			equip: async () => {}, // TODO
+			unequip: async () => {}, // TODO
 			market: async () => handleMarketInteraction(buttonInteraction),
 			lootboxes: async () => handleLootboxInteraction(buttonInteraction),
 			open_lootbox: async () =>
 				handleOpenLootboxInteraction(buttonInteraction, user),
 			regular_shop: async () => handleRegularShopInteraction(buttonInteraction),
+			buy_item: async () => {}, // TODO
 			tower: async () => handleTowerInteraction(buttonInteraction, user),
 			settings: async () => handleSettingsInteraction(buttonInteraction, user),
 			home: async () => {
