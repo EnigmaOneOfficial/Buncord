@@ -7,8 +7,8 @@ export const user_analytics = sqliteTable("user_analytics", {
 	userId: text("user_id").references(() => users.id),
 	messages: integer("messages_sent").default(0),
 	interactions: integer("interactions_sent").default(0),
-	joinedAt: integer("joined_at").default(Date.now()),
-	lastActive: integer("last_active").default(Date.now()),
+	joinedAt: integer("joined_at").default(0),
+	lastActive: integer("last_active").default(0),
 });
 
 export type IUserAnalytics = NonNullableTable<

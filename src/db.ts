@@ -44,7 +44,7 @@ export const getUser = async (id: string) => {
 	if (!analytics) {
 		analytics = await db
 			.insert(user_analytics)
-			.values({ userId: id })
+			.values({ userId: id, joinedAt: Date.now(), lastActive: Date.now() })
 			.returning()
 			.then((res) => res[0] as IUserAnalytics);
 	}
