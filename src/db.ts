@@ -70,6 +70,46 @@ export const getUser = async (id: string) => {
 	};
 };
 
+export const updateUser = async (id: string, data: Partial<IUsers>) => {
+	return await db.update(users).set(data).where(eq(users.id, id)).returning();
+};
+
+export const updateStats = async (id: string, data: Partial<IUserStats>) => {
+	return await db
+		.update(user_stats)
+		.set(data)
+		.where(eq(user_stats.userId, id))
+		.returning();
+};
+
+export const updateAnalytics = async (
+	id: string,
+	data: Partial<IUserAnalytics>,
+) => {
+	return await db
+		.update(user_analytics)
+		.set(data)
+		.where(eq(user_analytics.userId, id))
+		.returning();
+};
+
+export const getRequiredXPForNextLevel = (level: number) =>
+	Math.ceil(0.1 * level ** 2 + 10 * level + 10);
+
+export const gainXP = async (id: string, xp: number) => {
+	const { stats } = await getUser(id);
+	const requiredXP = getRequiredXPForNextLevel(stats.level);
+	const newXP = stats.experience + xp;
+	if (newXP >= requiredXP) {
+		const newLevel = stats.level + 1;
+		const newExperience = newXP - requiredXP;
+		await updateStats(id, { level: newLevel, experience: newExperience });
+		return { level: newLevel, experience: newExperience };
+	}
+	await updateStats(id, { experience: newXP });
+	return { level: stats.level, experience: newXP };
+};
+
 export const items = new Collection<number, IItem>();
 
 for (const file of new Glob("*.ts").scanSync("src/items/")) {

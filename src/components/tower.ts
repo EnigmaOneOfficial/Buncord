@@ -8,8 +8,13 @@ import {
 import { getUser } from "~/db";
 import type { IUsers } from "~/schemas/users";
 import { createProfileActionRow } from "./profile";
+import type { IUserStats } from "~/schemas/user_stats";
 
-export const createTowerEmbed = (user: IUsers) => {
+export const createTowerEmbed = ({
+	stats,
+}: {
+	stats: IUserStats;
+}) => {
 	const embed = new EmbedBuilder()
 		.setTitle("Tower")
 		.setColor("#FFD700")
@@ -17,12 +22,12 @@ export const createTowerEmbed = (user: IUsers) => {
 		.addFields(
 			{
 				name: "Current Floor",
-				value: user.currentDungeon.toString(),
+				value: stats.currentDungeon.toString(),
 				inline: true,
 			},
 			{
 				name: "Highest Floor Reached",
-				value: user.highestDungeon.toString(),
+				value: stats.highestDungeon.toString(),
 				inline: true,
 			},
 		);
@@ -52,7 +57,7 @@ export const createTowerActionRow = () => {
 export const handleTowerInteraction = async (
 	interaction: ButtonInteraction,
 ) => {
-	const { user } = await getUser(interaction.user.id);
+	const user = await getUser(interaction.user.id);
 	await interaction.editReply({
 		embeds: [createTowerEmbed(user)],
 		components: [createTowerActionRow(), createProfileActionRow("tower")],

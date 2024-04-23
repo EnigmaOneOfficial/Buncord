@@ -6,8 +6,16 @@ import {
 import { eq } from "drizzle-orm";
 import { error } from "~/util/log";
 import type { IEvent, IEventExecute } from "../../types/bot";
-import { getUser } from "~/db";
+import {
+	gainXP,
+	getUser,
+	updateAnalytics,
+	updateStats,
+	updateUser,
+} from "~/db";
 import { users } from "~/schemas/users";
+import { user_stats } from "~/schemas/user_stats";
+import { user_analytics } from "~/schemas/user_analytics";
 
 const name = Events.InteractionCreate;
 const execute: IEventExecute<ChatInputCommandInteraction> = async (
@@ -17,15 +25,16 @@ const execute: IEventExecute<ChatInputCommandInteraction> = async (
 	const member = interaction.member;
 	if (!member) return;
 
-	const { user } = await getUser(interaction.user.id);
-	await client.db
-		.update(users)
-		.set({
-			messageCount: user.messageCount + 1,
-			avatar: interaction.user.avatarURL(),
-			username: member.user.username,
-		})
-		.where(eq(users.id, member.user.id));
+	const { stats, analytics } = await getUser(interaction.user.id);
+	await updateAnalytics(interaction.user.id, {
+		interactions: analytics.interactions + 1,
+		lastActive: Date.now(),
+	});
+	await gainXP(interaction.user.id, 1);
+	await updateUser(interaction.user.id, {
+		username: interaction.user.username,
+		avatar: interaction.user.avatarURL() || "",
+	});
 
 	const command = client.commands.get(interaction.commandName);
 	if (!command || !command.onInteraction) return;

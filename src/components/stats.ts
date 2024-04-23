@@ -8,13 +8,20 @@ import {
 import { getUser } from "~/db";
 import type { IUsers } from "~/schemas/users";
 import { createProfileActionRow } from "./profile";
+import type { IUserStats } from "~/schemas/user_stats";
 
-export const createStatsEmbed = (user: IUsers) => {
+export const createStatsEmbed = ({
+	user,
+	stats,
+}: {
+	user: IUsers;
+	stats: IUserStats;
+}) => {
 	const embed = new EmbedBuilder()
 		.setTitle(`${user.username}'s Stats`)
 		.addFields(
-			{ name: "Level", value: user.level.toString(), inline: true },
-			{ name: "Experience", value: user.experience.toString(), inline: true },
+			{ name: "Level", value: stats.level.toString(), inline: true },
+			{ name: "Experience", value: stats.experience.toString(), inline: true },
 		)
 		.setColor("#FFD700")
 		.setTimestamp();
@@ -40,7 +47,7 @@ export const createStatsActionRow = () => {
 export const handleStatsInteraction = async (
 	interaction: ButtonInteraction,
 ) => {
-	const { user } = await getUser(interaction.user.id);
+	const user = await getUser(interaction.user.id);
 	await interaction.editReply({
 		embeds: [createStatsEmbed(user)],
 		components: [createStatsActionRow(), createProfileActionRow("stats")],

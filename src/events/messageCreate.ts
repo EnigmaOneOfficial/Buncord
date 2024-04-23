@@ -1,21 +1,33 @@
 import { ChannelType, Collection, Events, type Message } from "discord.js";
-import { users } from "~/schemas/users";
-import { eq } from "drizzle-orm";
-import { error } from "~/util/log";
+import { error, log } from "~/util/log";
 import type { IEvent, IEventExecute } from "../../types/bot";
-import { getUser } from "~/db";
+import {
+	gainXP,
+	getRequiredXPForNextLevel,
+	getUser,
+	updateAnalytics,
+	updateStats,
+	updateUser,
+} from "~/db";
 
 const name = Events.MessageCreate;
 const execute: IEventExecute<Message> = async (client, message) => {
-	const { user } = await getUser(message.author.id);
-	await client.db
-		.update(users)
-		.set({
-			messageCount: user.messageCount + 1,
-			avatar: message.author.avatarURL(),
-			username: message.author.username,
-		})
-		.where(eq(users.id, message.author.id));
+	const { analytics, stats } = await getUser(message.author.id);
+	await updateAnalytics(message.author.id, {
+		messages: analytics.messages + 1,
+		lastActive: Date.now(),
+	});
+	await gainXP(message.author.id, 1);
+	log(`User ${message.author.id} gained 1 XP`);
+	log(
+		`Required XP for level ${
+			stats.level + 1
+		}: ${await getRequiredXPForNextLevel(stats.level + 1)}`,
+	);
+	await updateUser(message.author.id, {
+		username: message.author.username,
+		avatar: message.author.avatarURL() || "",
+	});
 
 	if (message.author.bot) return;
 	if (!message.content.startsWith("!")) return;

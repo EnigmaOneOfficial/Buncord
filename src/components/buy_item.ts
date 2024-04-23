@@ -11,6 +11,7 @@ import { shop_items } from "./shop";
 import { users } from "~/schemas/users";
 import { eq } from "drizzle-orm";
 import { createProfileActionRow } from "./profile";
+import { user_stats } from "~/schemas/user_stats";
 
 export const createBuyItemEmbed = (item: IItem) => {
 	const embed = new EmbedBuilder()
@@ -90,8 +91,8 @@ export const handleBuyItemInteraction = async (
 			components: [createBuyItemNotExistActionRow()],
 		});
 	} else {
-		const { user } = await getUser(interaction.user.id);
-		const gold = user.gold;
+		const { user, stats } = await getUser(interaction.user.id);
+		const gold = stats.gold;
 		const price =
 			shop_items.find((shopItem) => shopItem.id === item.id)?.price || 0;
 		if (gold < price) {
@@ -104,7 +105,7 @@ export const handleBuyItemInteraction = async (
 			});
 		} else {
 			await db
-				.update(users)
+				.update(user_stats)
 				.set({ gold: gold - price })
 				.where(eq(users.id, user.id));
 			await addItemToInventory(user.id, item.id);
