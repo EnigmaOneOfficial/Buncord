@@ -8,7 +8,7 @@ import {
 } from "discord.js";
 import type { IUserItem, IItem } from "~/schemas/user_items";
 import { getInventory } from "~/db";
-import { createProfileActionRow } from "./profile";
+import { createMainMenuActionRow } from "./main_menu";
 
 export const createInventoryItemEmbed = (item: IUserItem) => {
 	const embed = new EmbedBuilder()
@@ -71,13 +71,13 @@ export const handleInventoryItemInteraction = async (
 	const item =
 		interaction instanceof StringSelectMenuInteraction
 			? inventory.find((i) => i.id === Number(interaction.values[0]))
-			: inventory.find((i) => i.id === selectedItem?.id);
+			: inventory.find((i) => i.itemId === selectedItem?.id);
 	if (!item) {
 		await interaction.editReply({
 			embeds: [createInventoryItemNotExistEmbed()],
 			components: [
 				createInventoryItemNotExistActionRow(),
-				createProfileActionRow("inventory"),
+				createMainMenuActionRow("inventory"),
 			],
 		});
 	} else {
@@ -85,7 +85,7 @@ export const handleInventoryItemInteraction = async (
 			embeds: [createInventoryItemEmbed(item)],
 			components: [
 				createInventoryItemActionRow(item),
-				createProfileActionRow("inventory"),
+				createMainMenuActionRow("inventory"),
 			],
 		});
 	}

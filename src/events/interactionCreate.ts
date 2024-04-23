@@ -3,19 +3,9 @@ import {
 	Collection,
 	Events,
 } from "discord.js";
-import { eq } from "drizzle-orm";
 import { error } from "~/util/log";
 import type { IEvent, IEventExecute } from "../../types/bot";
-import {
-	gainXP,
-	getUser,
-	updateAnalytics,
-	updateStats,
-	updateUser,
-} from "~/db";
-import { users } from "~/schemas/users";
-import { user_stats } from "~/schemas/user_stats";
-import { user_analytics } from "~/schemas/user_analytics";
+import { gainXP, getUser, updateAnalytics, updateUser } from "~/db";
 
 const name = Events.InteractionCreate;
 const execute: IEventExecute<ChatInputCommandInteraction> = async (
@@ -32,8 +22,8 @@ const execute: IEventExecute<ChatInputCommandInteraction> = async (
 	});
 	await gainXP(interaction.user.id, 1);
 	await updateUser(interaction.user.id, {
-		username: interaction.user.username,
-		avatar: interaction.user.avatarURL() || "",
+		username: interaction.user.displayName,
+		avatar: interaction.user.displayAvatarURL() || "",
 	});
 
 	const command = client.commands.get(interaction.commandName);

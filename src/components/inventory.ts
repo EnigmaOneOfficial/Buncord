@@ -9,7 +9,7 @@ import {
 import { getInventory, getUser } from "~/db";
 import type { IUserItem } from "~/schemas/user_items";
 import type { IUsers } from "~/schemas/users";
-import { createProfileActionRow } from "./profile";
+import { createMainMenuActionRow } from "./main_menu";
 
 const MAX_ITEMS_PER_PAGE = 5;
 
@@ -58,7 +58,7 @@ export const createInventoryActionRow = (
 			)
 			.setStyle(ButtonStyle.Primary),
 		new ButtonBuilder()
-			.setCustomId("home")
+			.setCustomId("profile")
 			.setLabel("Back")
 			.setStyle(ButtonStyle.Secondary),
 	);
@@ -103,12 +103,12 @@ export const handleInventoryInteraction = async (
 			inventory.length === 0
 				? [
 						createInventoryActionRow(inventory, page),
-						createProfileActionRow("inventory"),
+						createMainMenuActionRow("profile"),
 					]
 				: [
 						createInventorySelectionRow(inventory, page),
 						createInventoryActionRow(inventory, page),
-						createProfileActionRow("inventory"),
+						createMainMenuActionRow("profile"),
 					],
 	});
 };

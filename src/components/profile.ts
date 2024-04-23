@@ -3,55 +3,92 @@ import {
 	ActionRowBuilder,
 	ButtonBuilder,
 	ButtonStyle,
+	type ButtonInteraction,
 } from "discord.js";
+import { getRequiredXPForNextLevel, getUser } from "~/db";
 import type { IUserAnalytics } from "~/schemas/user_analytics";
 import type { IUserStats } from "~/schemas/user_stats";
 import type { IUsers } from "~/schemas/users";
-import type { Menu } from "../../types/components";
+import { createMainMenuActionRow } from "./main_menu";
 
 export const createProfileEmbed = ({
+	stats,
 	user,
 	analytics,
-	stats,
-}: { user: IUsers; analytics: IUserAnalytics; stats: IUserStats }) => {
+}: {
+	stats: IUserStats;
+	user: IUsers;
+	analytics: IUserAnalytics;
+}) => {
 	const embed = new EmbedBuilder()
-		.setTitle(`${user.username}'s Profile`)
+		.setTitle("Profile")
 		.setThumbnail(user.avatar)
-		.setColor("#FFD700")
+		.setColor("#7289DA")
+		.addFields(
+			{
+				name: "Username",
+				value: user.username,
+				inline: true,
+			},
+			{
+				name: "Level",
+				value: `${stats.level}`,
+				inline: true,
+			},
+			{
+				name: "Experience",
+				value: `${stats.experience}/${getRequiredXPForNextLevel(stats.level)}`,
+				inline: true,
+			},
+			{
+				name: "Gold",
+				value: `${stats.gold}`,
+				inline: true,
+			},
+			{
+				name: "Messages",
+				value: `${analytics.messages}`,
+				inline: true,
+			},
+			{
+				name: "Interactions",
+				value: `${analytics.interactions}`,
+				inline: true,
+			},
+		)
 		.setTimestamp();
 
 	return embed;
 };
 
-export const createProfileActionRow = (selected?: Menu) => {
-	const buttons = {
-		stats: new ButtonBuilder()
-			.setCustomId("stats")
-			.setLabel("Stats")
-			.setStyle(ButtonStyle.Primary),
-		inventory: new ButtonBuilder()
-			.setCustomId("inventory")
-			.setLabel("Inventory")
-			.setStyle(ButtonStyle.Primary),
-		market: new ButtonBuilder()
-			.setCustomId("market")
-			.setLabel("Market")
-			.setStyle(ButtonStyle.Primary),
-		tower: new ButtonBuilder()
-			.setCustomId("tower")
-			.setLabel("Tower")
-			.setStyle(ButtonStyle.Primary),
-		settings: new ButtonBuilder()
-			.setCustomId("settings")
-			.setLabel("Settings")
-			.setStyle(ButtonStyle.Primary),
-	};
-	const nonSelectedButtons = Object.keys(buttons).filter(
-		(key) => key !== selected,
-	);
+export const createProfileActionRow = () => {
 	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-		nonSelectedButtons.map((key) => buttons[key as keyof typeof buttons]),
+		new ButtonBuilder()
+			.setCustomId("stats")
+			.setLabel("📊")
+			.setStyle(ButtonStyle.Success),
+		new ButtonBuilder()
+			.setCustomId("inventory")
+			.setLabel("🎒")
+			.setStyle(ButtonStyle.Success),
+		new ButtonBuilder()
+			.setCustomId("achievements")
+			.setLabel("Achievements")
+			.setStyle(ButtonStyle.Primary),
+		new ButtonBuilder()
+			.setCustomId("home")
+			.setLabel("Back")
+			.setStyle(ButtonStyle.Secondary),
 	);
 
 	return actionRow;
+};
+
+export const handleProfileInteraction = async (
+	interaction: ButtonInteraction,
+) => {
+	await interaction.editReply({
+		embeds: [createProfileEmbed(await getUser(interaction.user.id))],
+		components: [createProfileActionRow(), createMainMenuActionRow("profile")],
+	});
 };

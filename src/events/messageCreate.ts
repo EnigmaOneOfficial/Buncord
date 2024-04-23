@@ -18,15 +18,9 @@ const execute: IEventExecute<Message> = async (client, message) => {
 		lastActive: Date.now(),
 	});
 	await gainXP(message.author.id, 1);
-	log(`User ${message.author.id} gained 1 XP`);
-	log(
-		`Required XP for level ${
-			stats.level + 1
-		}: ${await getRequiredXPForNextLevel(stats.level + 1)}`,
-	);
 	await updateUser(message.author.id, {
-		username: message.author.username,
-		avatar: message.author.avatarURL() || "",
+		username: message.author.displayName,
+		avatar: message.author.displayAvatarURL() || "",
 	});
 
 	if (message.author.bot) return;

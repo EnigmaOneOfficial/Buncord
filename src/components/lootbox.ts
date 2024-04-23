@@ -5,7 +5,7 @@ import {
 	ButtonStyle,
 	type ButtonInteraction,
 } from "discord.js";
-import { createProfileActionRow } from "./profile";
+import { createMainMenuActionRow } from "./main_menu";
 
 export const createLootboxEmbed = () => {
 	const embed = new EmbedBuilder()
@@ -36,6 +36,6 @@ export const handleLootboxInteraction = async (
 ) => {
 	await interaction.editReply({
 		embeds: [createLootboxEmbed()],
-		components: [createLootboxActionRow(), createProfileActionRow("market")],
+		components: [createLootboxActionRow(), createMainMenuActionRow("market")],
 	});
 };

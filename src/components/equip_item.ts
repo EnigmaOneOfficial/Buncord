@@ -6,13 +6,13 @@ import {
 	type ButtonInteraction,
 } from "discord.js";
 import { eq } from "drizzle-orm";
-import { db } from "~/db";
+import { db, items } from "~/db";
 import { user_items, type IItem } from "~/schemas/user_items";
 import {
 	createInventoryItemNotExistEmbed,
 	createInventoryItemNotExistActionRow,
 } from "./inventory_item";
-import { createProfileActionRow } from "./profile";
+import { createMainMenuActionRow } from "./main_menu";
 
 export const createEquipItemEmbed = (item: IItem) => {
 	const embed = new EmbedBuilder()
@@ -44,21 +44,23 @@ export const handleEquipItemInteraction = async (
 			embeds: [createInventoryItemNotExistEmbed()],
 			components: [
 				createInventoryItemNotExistActionRow(),
-				createProfileActionRow("item"),
+				createMainMenuActionRow("item"),
 			],
 		});
 	} else {
-		await db
+		const updatedItem = await db
 			.update(user_items)
 			.set({
 				equipped: 1,
 			})
-			.where(eq(user_items.itemId, item.id));
+			.where(eq(user_items.itemId, item.id))
+			.returning()
+			.then((rows) => rows[0]);
 		await interaction.editReply({
 			embeds: [createEquipItemEmbed(item)],
-			components: [createEquipItemActionRow(), createProfileActionRow("item")],
+			components: [createEquipItemActionRow(), createMainMenuActionRow("item")],
 		});
-	}
 
-	return item;
+		return items.find((item) => item.id === updatedItem?.itemId);
+	}
 };

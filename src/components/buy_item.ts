@@ -6,12 +6,12 @@ import {
 	type ButtonInteraction,
 } from "discord.js";
 import type { IItem } from "~/schemas/user_items";
-import { addItemToInventory, db, getUser } from "~/db";
+import { addItemToInventory, db, getUser, items } from "~/db";
 import { shop_items } from "./shop";
 import { users } from "~/schemas/users";
 import { eq } from "drizzle-orm";
-import { createProfileActionRow } from "./profile";
 import { user_stats } from "~/schemas/user_stats";
+import { createMainMenuActionRow } from "./main_menu";
 
 export const createBuyItemEmbed = (item: IItem) => {
 	const embed = new EmbedBuilder()
@@ -100,7 +100,7 @@ export const handleBuyItemInteraction = async (
 				embeds: [createNotEnoughGoldEmbed()],
 				components: [
 					createNotEnoughGoldActionRow(),
-					createProfileActionRow("shop"),
+					createMainMenuActionRow("shop"),
 				],
 			});
 		} else {
@@ -108,11 +108,13 @@ export const handleBuyItemInteraction = async (
 				.update(user_stats)
 				.set({ gold: gold - price })
 				.where(eq(users.id, user.id));
-			await addItemToInventory(user.id, item.id);
+			const newItem = await addItemToInventory(user.id, item.id);
 			await interaction.editReply({
 				embeds: [createBuyItemEmbed(item)],
-				components: [createBuyItemActionRow(), createProfileActionRow("shop")],
+				components: [createBuyItemActionRow(), createMainMenuActionRow("shop")],
 			});
+
+			return items.find((item) => item.id === newItem?.itemId);
 		}
 	}
 };

@@ -8,10 +8,6 @@ import { getUser } from "~/db";
 import { handleMarketInteraction } from "~/components/market";
 import { handleStatsInteraction } from "~/components/stats";
 import { handleInventoryInteraction } from "~/components/inventory";
-import {
-	createProfileEmbed,
-	createProfileActionRow,
-} from "~/components/profile";
 import { handleTowerInteraction } from "~/components/tower";
 import { handleSettingsInteraction } from "~/components/settings";
 import { handleAchievementsInteraction } from "~/components/achievements";
@@ -24,10 +20,19 @@ import { handleBuyItemInteraction } from "~/components/buy_item";
 import { handleInventoryItemInteraction } from "~/components/inventory_item";
 import { handleEquipItemInteraction } from "~/components/equip_item";
 import { handleUnequipItemInteraction } from "~/components/unequip_item";
+import {
+	createMainMenuActionRow,
+	createMainMenuEmbed,
+	handleMainMenuInteraction,
+} from "~/components/main_menu";
+import { handleProfileInteraction } from "~/components/profile";
+import { log } from "~/util/log";
+
+const COLLECTOR_TIME = 120000;
 
 const data: ICommandData = {
-	name: "profile",
-	description: "Displays your profile information.",
+	name: "play",
+	description: "Displays the main menu.",
 	cooldown: 5,
 };
 
@@ -40,19 +45,19 @@ const onInteraction: ICommandExecute<ChatInputCommandInteraction> = async (
 	interaction,
 ) => {
 	const message = await interaction.reply({
-		embeds: [createProfileEmbed(await getUser(interaction.user.id))],
-		components: [createProfileActionRow()],
+		embeds: [createMainMenuEmbed(await getUser(interaction.user.id))],
+		components: [createMainMenuActionRow()],
 		fetchReply: true,
 	});
 
 	const collector = message.createMessageComponentCollector({
 		componentType: ComponentType.Button,
-		time: 60000,
+		time: COLLECTOR_TIME,
 	});
 
 	const selectionCollector = message.createMessageComponentCollector({
 		componentType: ComponentType.StringSelect,
-		time: 60000,
+		time: COLLECTOR_TIME,
 	});
 
 	let inventoryPage = 0;
@@ -69,65 +74,80 @@ const onInteraction: ICommandExecute<ChatInputCommandInteraction> = async (
 		}
 
 		await buttonInteraction.deferUpdate();
-
 		switch (buttonInteraction.customId) {
+			case "profile":
+				await handleProfileInteraction(buttonInteraction);
+				break;
 			case "stats":
-				handleStatsInteraction(buttonInteraction);
+				await handleStatsInteraction(buttonInteraction);
 				break;
 			case "achievements":
-				handleAchievementsInteraction(buttonInteraction);
+				await handleAchievementsInteraction(buttonInteraction);
 				break;
 			case "inventory":
-				handleInventoryInteraction(buttonInteraction, inventoryPage);
+				await handleInventoryInteraction(buttonInteraction, inventoryPage);
 				break;
 			case "inventory_next_page":
 				inventoryPage++;
-				handleInventoryInteraction(buttonInteraction, inventoryPage);
+				await handleInventoryInteraction(buttonInteraction, inventoryPage);
 				break;
 			case "inventory_previous_page":
 				inventoryPage--;
-				handleInventoryInteraction(buttonInteraction, inventoryPage);
+				await handleInventoryInteraction(buttonInteraction, inventoryPage);
 				break;
 			case "inventory_select":
-				handleInventoryItemInteraction(
+				await handleInventoryItemInteraction(
 					buttonInteraction,
 					selectedInventoryItem,
 				);
 				break;
-			case "equip_item":
-				handleEquipItemInteraction(buttonInteraction, selectedInventoryItem);
+			case "equip_item": {
+				const updatedItem = await handleEquipItemInteraction(
+					buttonInteraction,
+					selectedInventoryItem,
+				);
+				if (updatedItem) {
+					selectedInventoryItem = updatedItem;
+				}
 				break;
+			}
 			case "unequip_item":
-				handleUnequipItemInteraction(buttonInteraction, selectedInventoryItem);
+				selectedInventoryItem = await handleUnequipItemInteraction(
+					buttonInteraction,
+					selectedInventoryItem,
+				);
 				break;
 			case "market":
-				handleMarketInteraction(buttonInteraction);
+				await handleMarketInteraction(buttonInteraction);
 				break;
 			case "lootboxes":
-				handleLootboxInteraction(buttonInteraction);
+				await handleLootboxInteraction(buttonInteraction);
 				break;
 			case "open_lootbox":
-				handleOpenLootboxInteraction(buttonInteraction);
+				await handleOpenLootboxInteraction(buttonInteraction);
 				break;
 			case "shop":
-				handleShopInteraction(buttonInteraction, shopPage);
+				await handleShopInteraction(buttonInteraction, shopPage);
 				break;
 			case "shop_next_page":
 				shopPage++;
-				handleShopInteraction(buttonInteraction, shopPage);
+				await handleShopInteraction(buttonInteraction, shopPage);
 				break;
 			case "shop_previous_page":
 				shopPage--;
-				handleShopInteraction(buttonInteraction, shopPage);
+				await handleShopInteraction(buttonInteraction, shopPage);
 				break;
 			case "shop_select":
-				handleShopItemInteraction(buttonInteraction, selectedShopItem);
+				await handleShopItemInteraction(buttonInteraction, selectedShopItem);
 				break;
 			case "buy_item":
-				handleBuyItemInteraction(buttonInteraction, selectedShopItem);
+				selectedShopItem = await handleBuyItemInteraction(
+					buttonInteraction,
+					selectedShopItem,
+				);
 				break;
 			case "tower":
-				handleTowerInteraction(buttonInteraction);
+				await handleTowerInteraction(buttonInteraction);
 				break;
 			case "enter_tower":
 				// TODO
@@ -136,13 +156,10 @@ const onInteraction: ICommandExecute<ChatInputCommandInteraction> = async (
 				// TODO
 				break;
 			case "settings":
-				handleSettingsInteraction(buttonInteraction);
+				await handleSettingsInteraction(buttonInteraction);
 				break;
 			case "home":
-				await interaction.editReply({
-					embeds: [createProfileEmbed(await getUser(interaction.user.id))],
-					components: [createProfileActionRow()],
-				});
+				await handleMainMenuInteraction(buttonInteraction);
 				break;
 		}
 
@@ -180,10 +197,10 @@ const onInteraction: ICommandExecute<ChatInputCommandInteraction> = async (
 	});
 };
 
-const profile: ICommand = {
+const play: ICommand = {
 	builder,
 	data,
 	onInteraction,
 };
 
-export default profile;
+export default play;

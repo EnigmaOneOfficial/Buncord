@@ -7,7 +7,7 @@ import {
 } from "discord.js";
 import { getUser } from "~/db";
 import type { IUsers } from "~/schemas/users";
-import { createProfileActionRow } from "./profile";
+import { createMainMenuActionRow } from "./main_menu";
 import type { IUserStats } from "~/schemas/user_stats";
 
 export const createStatsEmbed = ({
@@ -20,8 +20,20 @@ export const createStatsEmbed = ({
 	const embed = new EmbedBuilder()
 		.setTitle(`${user.username}'s Stats`)
 		.addFields(
-			{ name: "Level", value: stats.level.toString(), inline: true },
-			{ name: "Experience", value: stats.experience.toString(), inline: true },
+			{ name: "Strength", value: stats.strength.toString(), inline: true },
+			{ name: "Defense", value: stats.defense.toString(), inline: true },
+			{
+				name: "Intelligence",
+				value: stats.intelligence.toString(),
+				inline: true,
+			},
+			{ name: "Dexterity", value: stats.dexterity.toString(), inline: true },
+			{
+				name: "Constitution",
+				value: stats.constitution.toString(),
+				inline: true,
+			},
+			{ name: "Luck", value: stats.luck.toString(), inline: true },
 		)
 		.setColor("#FFD700")
 		.setTimestamp();
@@ -32,11 +44,7 @@ export const createStatsEmbed = ({
 export const createStatsActionRow = () => {
 	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
 		new ButtonBuilder()
-			.setCustomId("achievements")
-			.setLabel("Achievements")
-			.setStyle(ButtonStyle.Primary),
-		new ButtonBuilder()
-			.setCustomId("home")
+			.setCustomId("profile")
 			.setLabel("Back")
 			.setStyle(ButtonStyle.Secondary),
 	);
@@ -50,6 +58,6 @@ export const handleStatsInteraction = async (
 	const user = await getUser(interaction.user.id);
 	await interaction.editReply({
 		embeds: [createStatsEmbed(user)],
-		components: [createStatsActionRow(), createProfileActionRow("stats")],
+		components: [createStatsActionRow(), createMainMenuActionRow("profile")],
 	});
 };

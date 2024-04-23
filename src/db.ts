@@ -129,8 +129,6 @@ for (const file of new Glob("*.ts").scanSync("src/items/")) {
 	items.set(item.id, item);
 }
 
-log(`Items: ${items.size}`);
-
 export const getInventory = async (userId: string) => {
 	const inventory = (await db
 		.select()
@@ -154,9 +152,14 @@ export const addItemToInventory = async (userId: string, itemId: number) => {
 			.update(user_items)
 			.set({ quantity: item.quantity + 1 })
 			.where(eq(user_items.userId, userId) && eq(user_items.itemId, itemId))
-			.returning();
+			.returning()
+			.then((res) => res[0]);
 	}
-	return await db.insert(user_items).values({ userId, itemId }).returning();
+	return await db
+		.insert(user_items)
+		.values({ userId, itemId })
+		.returning()
+		.then((res) => res[0]);
 };
 
 export const removeItemFromInventory = async (

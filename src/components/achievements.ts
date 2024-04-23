@@ -7,7 +7,7 @@ import {
 } from "discord.js";
 import { getUser } from "~/db";
 import type { IUsers } from "~/schemas/users";
-import { createProfileActionRow } from "./profile";
+import { createMainMenuActionRow } from "./main_menu";
 
 export const createAchievementsEmbed = (user: IUsers) => {
 	const embed = new EmbedBuilder()
@@ -22,7 +22,7 @@ export const createAchievementsEmbed = (user: IUsers) => {
 export const createAchievementsActionRow = () => {
 	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
 		new ButtonBuilder()
-			.setCustomId("stats")
+			.setCustomId("profile")
 			.setLabel("Back")
 			.setStyle(ButtonStyle.Secondary),
 	);
@@ -38,7 +38,7 @@ export const handleAchievementsInteraction = async (
 		embeds: [createAchievementsEmbed(user)],
 		components: [
 			createAchievementsActionRow(),
-			createProfileActionRow("stats"),
+			createMainMenuActionRow("profile"),
 		],
 	});
 };

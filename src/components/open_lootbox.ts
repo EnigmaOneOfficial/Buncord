@@ -7,7 +7,7 @@ import {
 } from "discord.js";
 import type { IItem } from "~/schemas/user_items";
 import { addItemToInventory, getUser, items } from "~/db";
-import { createProfileActionRow } from "./profile";
+import { createMainMenuActionRow } from "./main_menu";
 
 export const createOpenLootboxEmbed = (item?: IItem) => {
 	const embed = new EmbedBuilder()
@@ -43,7 +43,7 @@ export const handleOpenLootboxInteraction = async (
 		embeds: [createOpenLootboxEmbed(items.get(random))],
 		components: [
 			createOpenLootboxActionRow(),
-			createProfileActionRow("lootboxes"),
+			createMainMenuActionRow("lootboxes"),
 		],
 	});
 };

@@ -13,7 +13,7 @@ import {
 	createBuyItemNotExistActionRow,
 	createBuyItemNotExistEmbed,
 } from "./buy_item";
-import { createProfileActionRow } from "./profile";
+import { createMainMenuActionRow } from "./main_menu";
 
 export const createShopItemEmbed = (item: IItem) => {
 	const embed = new EmbedBuilder()
@@ -64,13 +64,13 @@ export const handleShopItemInteraction = async (
 			embeds: [createBuyItemNotExistEmbed()],
 			components: [
 				createBuyItemNotExistActionRow(),
-				createProfileActionRow("shop"),
+				createMainMenuActionRow("shop"),
 			],
 		});
 	} else {
 		await interaction.editReply({
 			embeds: [createShopItemEmbed(item)],
-			components: [createShopItemActionRow(), createProfileActionRow("shop")],
+			components: [createShopItemActionRow(), createMainMenuActionRow("shop")],
 		});
 	}
 

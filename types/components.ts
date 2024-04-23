@@ -6,4 +6,5 @@ export type Menu =
 	| "settings"
 	| "shop"
 	| "lootboxes"
-	| "item";
+	| "item"
+	| "profile";
