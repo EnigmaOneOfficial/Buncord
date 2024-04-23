@@ -17,7 +17,7 @@ const execute: IEventExecute<ChatInputCommandInteraction> = async (
 	const member = interaction.member;
 	if (!member) return;
 
-	const user = await getUser(interaction.user.id);
+	const { user } = await getUser(interaction.user.id);
 	await client.db
 		.update(users)
 		.set({

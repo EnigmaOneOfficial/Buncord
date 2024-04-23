@@ -31,7 +31,7 @@ export const createSettingsActionRow = () => {
 export const handleSettingsInteraction = async (
 	interaction: ButtonInteraction,
 ) => {
-	const user = await getUser(interaction.user.id);
+	const { user } = await getUser(interaction.user.id);
 	await interaction.editReply({
 		embeds: [createSettingsEmbed(user)],
 		components: [createSettingsActionRow()],

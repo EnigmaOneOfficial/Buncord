@@ -6,10 +6,10 @@ import {
 	StringSelectMenuInteraction,
 	type ButtonInteraction,
 } from "discord.js";
-import type { IInventories, IItem } from "~/schemas/inventories";
+import type { IUserItem, IItem } from "~/schemas/user_items";
 import { getInventory } from "~/db";
 
-export const createInventoryItemEmbed = (item: IInventories) => {
+export const createInventoryItemEmbed = (item: IUserItem) => {
 	const embed = new EmbedBuilder()
 		.setTitle(item.details.name)
 		.setDescription(item.details.description)
@@ -41,7 +41,7 @@ export const createInventoryItemNotExistActionRow = () => {
 	return actionRow;
 };
 
-export const createInventoryItemActionRow = (item: IInventories) => {
+export const createInventoryItemActionRow = (item: IUserItem) => {
 	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
 		new ButtonBuilder()
 			.setCustomId("equip_item")

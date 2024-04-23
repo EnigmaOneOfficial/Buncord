@@ -7,7 +7,7 @@ import {
 } from "discord.js";
 import { eq } from "drizzle-orm";
 import { db } from "~/db";
-import { inventories, type IItem } from "~/schemas/inventories";
+import { user_items, type IItem } from "~/schemas/user_items";
 import {
 	createInventoryItemNotExistEmbed,
 	createInventoryItemNotExistActionRow,
@@ -45,11 +45,11 @@ export const handleEquipItemInteraction = async (
 		});
 	} else {
 		await db
-			.update(inventories)
+			.update(user_items)
 			.set({
 				equipped: 1,
 			})
-			.where(eq(inventories.itemId, item.id));
+			.where(eq(user_items.itemId, item.id));
 		await interaction.editReply({
 			embeds: [createEquipItemEmbed(item)],
 			components: [createEquipItemActionRow()],

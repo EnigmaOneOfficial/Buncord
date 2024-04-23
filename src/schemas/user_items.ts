@@ -2,7 +2,7 @@ import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { users } from "./users";
 import type { NonNullableTable, PrimitiveTable } from "../../types/utility";
 
-export const inventories = sqliteTable("inventories", {
+export const user_items = sqliteTable("user_items", {
 	id: integer("id").primaryKey(),
 	userId: text("user_id").references(() => users.id),
 	itemId: integer("item_id").default(0),
@@ -11,8 +11,8 @@ export const inventories = sqliteTable("inventories", {
 	locked: integer("locked").default(0),
 });
 
-export type IInventories = NonNullableTable<
-	typeof inventories.$inferSelect & {
+export type IUserItem = NonNullableTable<
+	typeof user_items.$inferSelect & {
 		details: IItem;
 	}
 >;

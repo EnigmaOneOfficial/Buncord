@@ -1,4 +1,4 @@
-import type { IItem } from "~/schemas/inventories";
+import type { IItem } from "~/schemas/user_items";
 
 const item: IItem = {
 	id: 4,

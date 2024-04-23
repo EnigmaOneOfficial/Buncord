@@ -7,8 +7,7 @@ import { getUser } from "~/db";
 
 const name = Events.MessageCreate;
 const execute: IEventExecute<Message> = async (client, message) => {
-	const user = await getUser(message.author.id);
-
+	const { user } = await getUser(message.author.id);
 	await client.db
 		.update(users)
 		.set({

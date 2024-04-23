@@ -4,9 +4,15 @@ import {
 	ButtonBuilder,
 	ButtonStyle,
 } from "discord.js";
+import type { IUserAnalytics } from "~/schemas/user_analytics";
+import type { IUserStats } from "~/schemas/user_stats";
 import type { IUsers } from "~/schemas/users";
 
-export const createProfileEmbed = (user: IUsers) => {
+export const createProfileEmbed = ({
+	user,
+	analytics,
+	stats,
+}: { user: IUsers; analytics: IUserAnalytics; stats: IUserStats }) => {
 	const embed = new EmbedBuilder()
 		.setTitle(`${user.username}'s Profile`)
 		.setThumbnail(user.avatar)

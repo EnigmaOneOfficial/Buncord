@@ -5,7 +5,7 @@ import {
 	ButtonStyle,
 	type ButtonInteraction,
 } from "discord.js";
-import type { IItem } from "~/schemas/inventories";
+import type { IItem } from "~/schemas/user_items";
 import { addItemToInventory, getUser, items } from "~/db";
 
 export const createOpenLootboxEmbed = (item?: IItem) => {
@@ -35,7 +35,7 @@ export const createOpenLootboxActionRow = () => {
 export const handleOpenLootboxInteraction = async (
 	interaction: ButtonInteraction,
 ) => {
-	const user = await getUser(interaction.user.id);
+	const { user } = await getUser(interaction.user.id);
 	const random = Math.ceil(items.size * Math.random());
 	await addItemToInventory(user.id, random);
 	await interaction.editReply({

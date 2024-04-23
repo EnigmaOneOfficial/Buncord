@@ -18,7 +18,7 @@ import { handleAchievementsInteraction } from "~/components/achievements";
 import { handleLootboxInteraction } from "~/components/lootbox";
 import { handleShopInteraction } from "~/components/shop";
 import { handleOpenLootboxInteraction } from "~/components/open_lootbox";
-import type { IItem } from "~/schemas/inventories";
+import type { IItem } from "~/schemas/user_items";
 import { handleShopItemInteraction } from "~/components/shop_item";
 import { handleBuyItemInteraction } from "~/components/buy_item";
 import { handleInventoryItemInteraction } from "~/components/inventory_item";
@@ -39,15 +39,9 @@ const onInteraction: ICommandExecute<ChatInputCommandInteraction> = async (
 	client,
 	interaction,
 ) => {
-	const user = await getUser(interaction.user.id);
-	if (!user) return;
-
-	const profileEmbed = createProfileEmbed(user);
-	const profileActionRow = createProfileActionRow();
-
 	const message = await interaction.reply({
-		embeds: [profileEmbed],
-		components: [profileActionRow],
+		embeds: [createProfileEmbed(await getUser(interaction.user.id))],
+		components: [createProfileActionRow()],
 		fetchReply: true,
 	});
 
@@ -146,7 +140,7 @@ const onInteraction: ICommandExecute<ChatInputCommandInteraction> = async (
 				break;
 			case "home":
 				await interaction.editReply({
-					embeds: [createProfileEmbed(user)],
+					embeds: [createProfileEmbed(await getUser(interaction.user.id))],
 					components: [createProfileActionRow()],
 				});
 				break;

@@ -7,7 +7,7 @@ import {
 	StringSelectMenuInteraction,
 } from "discord.js";
 import { items } from "~/db";
-import type { IItem } from "~/schemas/inventories";
+import type { IItem } from "~/schemas/user_items";
 import { shop_items } from "./shop";
 import {
 	createBuyItemNotExistActionRow,

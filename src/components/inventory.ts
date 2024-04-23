@@ -7,14 +7,14 @@ import {
 	type ButtonInteraction,
 } from "discord.js";
 import { getInventory, getUser } from "~/db";
-import type { IInventories } from "~/schemas/inventories";
+import type { IUserItem } from "~/schemas/user_items";
 import type { IUsers } from "~/schemas/users";
 
 const MAX_ITEMS_PER_PAGE = 5;
 
 export const createInventoryEmbed = (
 	user: IUsers,
-	inventory: IInventories[],
+	inventory: IUserItem[],
 	page: number,
 ) => {
 	const embed = new EmbedBuilder()
@@ -40,7 +40,7 @@ export const createInventoryEmbed = (
 };
 
 export const createInventoryActionRow = (
-	inventory: IInventories[],
+	inventory: IUserItem[],
 	page: number,
 ) => {
 	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -66,7 +66,7 @@ export const createInventoryActionRow = (
 };
 
 export const createInventorySelectionRow = (
-	inventory: IInventories[],
+	inventory: IUserItem[],
 	page: number,
 ) => {
 	const actionRow =
@@ -94,7 +94,7 @@ export const handleInventoryInteraction = async (
 	interaction: ButtonInteraction,
 	page: number,
 ) => {
-	const user = await getUser(interaction.user.id);
+	const { user } = await getUser(interaction.user.id);
 	const inventory = await getInventory(user.id);
 	await interaction.editReply({
 		embeds: [createInventoryEmbed(user, inventory, page)],

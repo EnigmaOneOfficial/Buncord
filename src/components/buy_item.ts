@@ -5,7 +5,7 @@ import {
 	ButtonStyle,
 	type ButtonInteraction,
 } from "discord.js";
-import type { IItem } from "~/schemas/inventories";
+import type { IItem } from "~/schemas/user_items";
 import { addItemToInventory, db, getUser } from "~/db";
 import { shop_items } from "./shop";
 import { users } from "~/schemas/users";
@@ -89,7 +89,7 @@ export const handleBuyItemInteraction = async (
 			components: [createBuyItemNotExistActionRow()],
 		});
 	} else {
-		const user = await getUser(interaction.user.id);
+		const { user } = await getUser(interaction.user.id);
 		const gold = user.gold;
 		const price =
 			shop_items.find((shopItem) => shopItem.id === item.id)?.price || 0;

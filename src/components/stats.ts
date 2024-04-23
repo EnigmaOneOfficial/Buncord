@@ -39,7 +39,7 @@ export const createStatsActionRow = () => {
 export const handleStatsInteraction = async (
 	interaction: ButtonInteraction,
 ) => {
-	const user = await getUser(interaction.user.id);
+	const { user } = await getUser(interaction.user.id);
 	await interaction.editReply({
 		embeds: [createStatsEmbed(user)],
 		components: [createStatsActionRow()],

@@ -5,13 +5,15 @@ import { eq } from "drizzle-orm";
 import { Glob } from "bun";
 import { error, log } from "~/util/log";
 import { Collection } from "discord.js";
-import {
-	DefaultItem,
-	inventories,
-	type IInventories,
-	type IItem,
-} from "./schemas/inventories";
 import { users, type IUsers } from "./schemas/users";
+import {
+	type IItem,
+	type IUserItem,
+	DefaultItem,
+	user_items,
+} from "./schemas/user_items";
+import { type IUserAnalytics, user_analytics } from "./schemas/user_analytics";
+import { type IUserStats, user_stats } from "./schemas/user_stats";
 
 const sqlite = new Database(
 	`${config.database.name}.${config.database.version.toString()}.db`,
@@ -19,21 +21,53 @@ const sqlite = new Database(
 export const db = drizzle(sqlite);
 
 export const getUser = async (id: string) => {
-	const user = (await db
+	let user = (await db
 		.select()
 		.from(users)
 		.where(eq(users.id, id))
 		.then((res) => res[0])) as IUsers;
 
 	if (!user) {
-		return await db
+		user = await db
 			.insert(users)
 			.values({ id })
 			.returning()
 			.then((res) => res[0] as IUsers);
 	}
 
-	return user;
+	let analytics = (await db
+		.select()
+		.from(user_analytics)
+		.where(eq(user_analytics.userId, id))
+		.then((res) => res[0])) as IUserAnalytics;
+
+	if (!analytics) {
+		analytics = await db
+			.insert(user_analytics)
+			.values({ userId: id })
+			.returning()
+			.then((res) => res[0] as IUserAnalytics);
+	}
+
+	let stats = (await db
+		.select()
+		.from(user_stats)
+		.where(eq(user_stats.userId, id))
+		.then((res) => res[0])) as IUserStats;
+
+	if (!stats) {
+		stats = await db
+			.insert(user_stats)
+			.values({ userId: id })
+			.returning()
+			.then((res) => res[0] as IUserStats);
+	}
+
+	return {
+		user,
+		analytics,
+		stats,
+	};
 };
 
 export const items = new Collection<number, IItem>();
@@ -60,9 +94,9 @@ log(`Items: ${items.size}`);
 export const getInventory = async (userId: string) => {
 	const inventory = (await db
 		.select()
-		.from(inventories)
-		.where(eq(inventories.userId, userId))
-		.then((res) => res)) as IInventories[];
+		.from(user_items)
+		.where(eq(user_items.userId, userId))
+		.then((res) => res)) as IUserItem[];
 
 	const itemsWithDetails = inventory.map((item) => ({
 		...item,
@@ -77,12 +111,12 @@ export const addItemToInventory = async (userId: string, itemId: number) => {
 	const item = inventory.find((i) => i.itemId === itemId);
 	if (item?.details?.stackable) {
 		return await db
-			.update(inventories)
+			.update(user_items)
 			.set({ quantity: item.quantity + 1 })
-			.where(eq(inventories.userId, userId) && eq(inventories.itemId, itemId))
+			.where(eq(user_items.userId, userId) && eq(user_items.itemId, itemId))
 			.returning();
 	}
-	return await db.insert(inventories).values({ userId, itemId }).returning();
+	return await db.insert(user_items).values({ userId, itemId }).returning();
 };
 
 export const removeItemFromInventory = async (
@@ -94,17 +128,13 @@ export const removeItemFromInventory = async (
 	if (item) {
 		if (item.quantity === 1) {
 			await db
-				.delete(inventories)
-				.where(
-					eq(inventories.userId, userId) && eq(inventories.itemId, itemId),
-				);
+				.delete(user_items)
+				.where(eq(user_items.userId, userId) && eq(user_items.itemId, itemId));
 		} else {
 			await db
-				.update(inventories)
+				.update(user_items)
 				.set({ quantity: item.quantity - 1 })
-				.where(
-					eq(inventories.userId, userId) && eq(inventories.itemId, itemId),
-				);
+				.where(eq(user_items.userId, userId) && eq(user_items.itemId, itemId));
 		}
 	}
 };
