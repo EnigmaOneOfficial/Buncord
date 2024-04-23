@@ -7,6 +7,7 @@ import {
 } from "discord.js";
 import { getUser } from "~/db";
 import type { IUsers } from "~/schemas/users";
+import { createProfileActionRow } from "./profile";
 
 export const createTowerEmbed = (user: IUsers) => {
 	const embed = new EmbedBuilder()
@@ -54,6 +55,6 @@ export const handleTowerInteraction = async (
 	const { user } = await getUser(interaction.user.id);
 	await interaction.editReply({
 		embeds: [createTowerEmbed(user)],
-		components: [createTowerActionRow()],
+		components: [createTowerActionRow(), createProfileActionRow("tower")],
 	});
 };

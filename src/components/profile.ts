@@ -7,6 +7,7 @@ import {
 import type { IUserAnalytics } from "~/schemas/user_analytics";
 import type { IUserStats } from "~/schemas/user_stats";
 import type { IUsers } from "~/schemas/users";
+import type { Menu } from "../../types/components";
 
 export const createProfileEmbed = ({
 	user,
@@ -22,28 +23,34 @@ export const createProfileEmbed = ({
 	return embed;
 };
 
-export const createProfileActionRow = () => {
-	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-		new ButtonBuilder()
+export const createProfileActionRow = (selected?: Menu) => {
+	const buttons = {
+		stats: new ButtonBuilder()
 			.setCustomId("stats")
 			.setLabel("Stats")
 			.setStyle(ButtonStyle.Primary),
-		new ButtonBuilder()
+		inventory: new ButtonBuilder()
 			.setCustomId("inventory")
 			.setLabel("Inventory")
 			.setStyle(ButtonStyle.Primary),
-		new ButtonBuilder()
+		market: new ButtonBuilder()
 			.setCustomId("market")
 			.setLabel("Market")
 			.setStyle(ButtonStyle.Primary),
-		new ButtonBuilder()
+		tower: new ButtonBuilder()
 			.setCustomId("tower")
 			.setLabel("Tower")
 			.setStyle(ButtonStyle.Primary),
-		new ButtonBuilder()
+		settings: new ButtonBuilder()
 			.setCustomId("settings")
 			.setLabel("Settings")
 			.setStyle(ButtonStyle.Primary),
+	};
+	const nonSelectedButtons = Object.keys(buttons).filter(
+		(key) => key !== selected,
+	);
+	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+		nonSelectedButtons.map((key) => buttons[key as keyof typeof buttons]),
 	);
 
 	return actionRow;

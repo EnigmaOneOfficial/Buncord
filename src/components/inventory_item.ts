@@ -8,6 +8,7 @@ import {
 } from "discord.js";
 import type { IUserItem, IItem } from "~/schemas/user_items";
 import { getInventory } from "~/db";
+import { createProfileActionRow } from "./profile";
 
 export const createInventoryItemEmbed = (item: IUserItem) => {
 	const embed = new EmbedBuilder()
@@ -74,12 +75,18 @@ export const handleInventoryItemInteraction = async (
 	if (!item) {
 		await interaction.editReply({
 			embeds: [createInventoryItemNotExistEmbed()],
-			components: [createInventoryItemNotExistActionRow()],
+			components: [
+				createInventoryItemNotExistActionRow(),
+				createProfileActionRow("inventory"),
+			],
 		});
 	} else {
 		await interaction.editReply({
 			embeds: [createInventoryItemEmbed(item)],
-			components: [createInventoryItemActionRow(item)],
+			components: [
+				createInventoryItemActionRow(item),
+				createProfileActionRow("inventory"),
+			],
 		});
 	}
 

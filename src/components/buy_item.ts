@@ -10,6 +10,7 @@ import { addItemToInventory, db, getUser } from "~/db";
 import { shop_items } from "./shop";
 import { users } from "~/schemas/users";
 import { eq } from "drizzle-orm";
+import { createProfileActionRow } from "./profile";
 
 export const createBuyItemEmbed = (item: IItem) => {
 	const embed = new EmbedBuilder()
@@ -96,7 +97,10 @@ export const handleBuyItemInteraction = async (
 		if (gold < price) {
 			await interaction.editReply({
 				embeds: [createNotEnoughGoldEmbed()],
-				components: [createNotEnoughGoldActionRow()],
+				components: [
+					createNotEnoughGoldActionRow(),
+					createProfileActionRow("shop"),
+				],
 			});
 		} else {
 			await db
@@ -106,7 +110,7 @@ export const handleBuyItemInteraction = async (
 			await addItemToInventory(user.id, item.id);
 			await interaction.editReply({
 				embeds: [createBuyItemEmbed(item)],
-				components: [createBuyItemActionRow()],
+				components: [createBuyItemActionRow(), createProfileActionRow("shop")],
 			});
 		}
 	}

@@ -9,6 +9,7 @@ import {
 import { getInventory, getUser } from "~/db";
 import type { IUserItem } from "~/schemas/user_items";
 import type { IUsers } from "~/schemas/users";
+import { createProfileActionRow } from "./profile";
 
 const MAX_ITEMS_PER_PAGE = 5;
 
@@ -100,10 +101,14 @@ export const handleInventoryInteraction = async (
 		embeds: [createInventoryEmbed(user, inventory, page)],
 		components:
 			inventory.length === 0
-				? [createInventoryActionRow(inventory, page)]
+				? [
+						createInventoryActionRow(inventory, page),
+						createProfileActionRow("inventory"),
+					]
 				: [
 						createInventorySelectionRow(inventory, page),
 						createInventoryActionRow(inventory, page),
+						createProfileActionRow("inventory"),
 					],
 	});
 };

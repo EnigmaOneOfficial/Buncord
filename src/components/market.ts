@@ -5,6 +5,7 @@ import {
 	ButtonStyle,
 	type MessageComponentInteraction,
 } from "discord.js";
+import { createProfileActionRow } from "./profile";
 
 export const createMarketEmbed = () => {
 	const embed = new EmbedBuilder()
@@ -38,6 +39,6 @@ export const handleMarketInteraction = async (
 ) => {
 	await interaction.editReply({
 		embeds: [createMarketEmbed()],
-		components: [createMarketActionRow()],
+		components: [createMarketActionRow(), createProfileActionRow("market")],
 	});
 };

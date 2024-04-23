@@ -7,6 +7,7 @@ import {
 } from "discord.js";
 import { getUser } from "~/db";
 import type { IUsers } from "~/schemas/users";
+import { createProfileActionRow } from "./profile";
 
 export const createStatsEmbed = (user: IUsers) => {
 	const embed = new EmbedBuilder()
@@ -42,6 +43,6 @@ export const handleStatsInteraction = async (
 	const { user } = await getUser(interaction.user.id);
 	await interaction.editReply({
 		embeds: [createStatsEmbed(user)],
-		components: [createStatsActionRow()],
+		components: [createStatsActionRow(), createProfileActionRow("stats")],
 	});
 };

@@ -6,6 +6,7 @@ import {
 	type ButtonInteraction,
 	StringSelectMenuBuilder,
 } from "discord.js";
+import { createProfileActionRow } from "./profile";
 
 const MAX_ITEMS_PER_PAGE = 5;
 
@@ -205,7 +206,11 @@ export const handleShopInteraction = async (
 		embeds: [createShopEmbed(page)],
 		components:
 			shop_items.length === 0
-				? [createShopActionRow(page)]
-				: [createShopSelectionRow(page), createShopActionRow(page)],
+				? [createShopActionRow(page), createProfileActionRow("market")]
+				: [
+						createShopSelectionRow(page),
+						createShopActionRow(page),
+						createProfileActionRow("market"),
+					],
 	});
 };

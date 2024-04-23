@@ -12,6 +12,7 @@ import {
 	createInventoryItemNotExistEmbed,
 	createInventoryItemNotExistActionRow,
 } from "./inventory_item";
+import { createProfileActionRow } from "./profile";
 
 export const createEquipItemEmbed = (item: IItem) => {
 	const embed = new EmbedBuilder()
@@ -41,7 +42,10 @@ export const handleEquipItemInteraction = async (
 	if (!item) {
 		await interaction.editReply({
 			embeds: [createInventoryItemNotExistEmbed()],
-			components: [createInventoryItemNotExistActionRow()],
+			components: [
+				createInventoryItemNotExistActionRow(),
+				createProfileActionRow("item"),
+			],
 		});
 	} else {
 		await db
@@ -52,7 +56,7 @@ export const handleEquipItemInteraction = async (
 			.where(eq(user_items.itemId, item.id));
 		await interaction.editReply({
 			embeds: [createEquipItemEmbed(item)],
-			components: [createEquipItemActionRow()],
+			components: [createEquipItemActionRow(), createProfileActionRow("item")],
 		});
 	}
 

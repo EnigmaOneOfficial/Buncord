@@ -13,6 +13,7 @@ import {
 	createBuyItemNotExistActionRow,
 	createBuyItemNotExistEmbed,
 } from "./buy_item";
+import { createProfileActionRow } from "./profile";
 
 export const createShopItemEmbed = (item: IItem) => {
 	const embed = new EmbedBuilder()
@@ -61,12 +62,15 @@ export const handleShopItemInteraction = async (
 	if (!item) {
 		await interaction.editReply({
 			embeds: [createBuyItemNotExistEmbed()],
-			components: [createBuyItemNotExistActionRow()],
+			components: [
+				createBuyItemNotExistActionRow(),
+				createProfileActionRow("shop"),
+			],
 		});
 	} else {
 		await interaction.editReply({
 			embeds: [createShopItemEmbed(item)],
-			components: [createShopItemActionRow()],
+			components: [createShopItemActionRow(), createProfileActionRow("shop")],
 		});
 	}
 

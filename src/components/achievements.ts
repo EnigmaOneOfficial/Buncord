@@ -7,6 +7,7 @@ import {
 } from "discord.js";
 import { getUser } from "~/db";
 import type { IUsers } from "~/schemas/users";
+import { createProfileActionRow } from "./profile";
 
 export const createAchievementsEmbed = (user: IUsers) => {
 	const embed = new EmbedBuilder()
@@ -35,6 +36,9 @@ export const handleAchievementsInteraction = async (
 	const { user } = await getUser(interaction.user.id);
 	await interaction.editReply({
 		embeds: [createAchievementsEmbed(user)],
-		components: [createAchievementsActionRow()],
+		components: [
+			createAchievementsActionRow(),
+			createProfileActionRow("stats"),
+		],
 	});
 };
