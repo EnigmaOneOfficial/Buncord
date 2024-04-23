@@ -11,8 +11,9 @@ import { createMainMenuActionRow } from "./main_menu";
 
 export const createSettingsEmbed = (user: IUsers) => {
 	const embed = new EmbedBuilder()
-		.setTitle(`${user.username}'s Settings`)
+		.setTitle("Settings")
 		.setColor("#FFD700")
+		.setDescription("Settings are not yet implemented. Check back later!")
 		.setTimestamp();
 
 	return embed;

@@ -18,7 +18,7 @@ export const createStatsEmbed = ({
 	stats: IUserStats;
 }) => {
 	const embed = new EmbedBuilder()
-		.setTitle(`${user.username}'s Stats`)
+		.setTitle("Stats")
 		.addFields(
 			{ name: "Strength", value: stats.strength.toString(), inline: true },
 			{ name: "Defense", value: stats.defense.toString(), inline: true },

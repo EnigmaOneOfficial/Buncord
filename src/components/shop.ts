@@ -8,7 +8,7 @@ import {
 } from "discord.js";
 import { createMainMenuActionRow } from "./main_menu";
 
-const MAX_ITEMS_PER_PAGE = 5;
+const MAX_ITEMS_PER_PAGE = 10;
 
 export const shop_items = [
 	{
@@ -23,7 +23,7 @@ export const shop_items = [
 	},
 	{
 		name: "Item 3",
-		id: 8,
+		id: 3,
 		price: 300,
 	},
 	{

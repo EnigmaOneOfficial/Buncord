@@ -20,24 +20,22 @@ export const createMainMenuEmbed = ({
 		.setTitle("Game Menu")
 		.setThumbnail(user.avatar)
 		.setColor("#7289DA")
-		.setDescription(
-			`Welcome, ${user.username}! Here you can access different parts of the game.`,
-		)
+		.setDescription(`Welcome, ${user.username}!`)
 		.addFields(
 			{
-				name: "👤 Profile",
+				name: "Profile",
 				value: "Access stats, inventory, and achievements.",
 			},
 			{
-				name: "🛒 Market",
+				name: "Market",
 				value: "Acquire or sell items.",
 			},
 			{
-				name: "🏰 Tower",
+				name: "Tower",
 				value: "Challenge the tower!",
 			},
 			{
-				name: "⚙️ Settings",
+				name: "Settings",
 				value: "Change your settings.",
 			},
 		)

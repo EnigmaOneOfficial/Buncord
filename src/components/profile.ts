@@ -65,11 +65,11 @@ export const createProfileActionRow = () => {
 	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
 		new ButtonBuilder()
 			.setCustomId("stats")
-			.setLabel("📊")
+			.setLabel("Stats")
 			.setStyle(ButtonStyle.Success),
 		new ButtonBuilder()
 			.setCustomId("inventory")
-			.setLabel("🎒")
+			.setLabel("Inventory")
 			.setStyle(ButtonStyle.Success),
 		new ButtonBuilder()
 			.setCustomId("achievements")

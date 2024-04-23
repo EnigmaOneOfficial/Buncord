@@ -11,7 +11,7 @@ import type { IUserItem } from "~/schemas/user_items";
 import type { IUsers } from "~/schemas/users";
 import { createMainMenuActionRow } from "./main_menu";
 
-const MAX_ITEMS_PER_PAGE = 5;
+const MAX_ITEMS_PER_PAGE = 10;
 
 export const createInventoryEmbed = (
 	user: IUsers,
@@ -19,7 +19,7 @@ export const createInventoryEmbed = (
 	page: number,
 ) => {
 	const embed = new EmbedBuilder()
-		.setTitle(`${user.username}'s Inventory`)
+		.setTitle("Inventory")
 		.setColor("#FFD700")
 		.setTimestamp();
 

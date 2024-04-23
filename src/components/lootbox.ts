@@ -11,6 +11,7 @@ export const createLootboxEmbed = () => {
 	const embed = new EmbedBuilder()
 		.setTitle("Lootboxes")
 		.setColor("#FFD700")
+		.setDescription("Open lootboxes to get random items.")
 		.setTimestamp();
 
 	return embed;

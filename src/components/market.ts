@@ -11,6 +11,21 @@ export const createMarketEmbed = () => {
 	const embed = new EmbedBuilder()
 		.setTitle("Market")
 		.setColor("#FFD700")
+		.setDescription(
+			"The market is where you can buy/sell items, open lootboxes, and more!",
+		)
+		.addFields(
+			{
+				name: "Shop",
+				value: "Buy items from the shop.",
+				inline: true,
+			},
+			{
+				name: "Lootboxes",
+				value: "Open lootboxes to get random items.",
+				inline: true,
+			},
+		)
 		.setTimestamp();
 
 	return embed;

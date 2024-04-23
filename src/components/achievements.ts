@@ -12,7 +12,7 @@ import { createMainMenuActionRow } from "./main_menu";
 export const createAchievementsEmbed = (user: IUsers) => {
 	const embed = new EmbedBuilder()
 		.setTitle(`${user.username}'s Achievements`)
-		.setDescription("Achievements are coming soon!")
+		.setDescription("Achievements are not yet implemented. Check back later!")
 		.setColor("#FFD700")
 		.setTimestamp();
 

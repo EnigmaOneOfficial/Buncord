@@ -19,6 +19,7 @@ export const createTowerEmbed = ({
 		.setTitle("Tower")
 		.setColor("#FFD700")
 		.setTimestamp()
+		.setDescription("Challenge the tower to earn rewards and become stronger!")
 		.addFields(
 			{
 				name: "Current Floor",
