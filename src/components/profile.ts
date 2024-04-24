@@ -87,6 +87,7 @@ export const createProfileActionRow = () => {
 export const handleProfileInteraction = async (
 	interaction: ButtonInteraction,
 ) => {
+	await interaction.deferUpdate();
 	await interaction.editReply({
 		embeds: [createProfileEmbed(await getUser(interaction.user.id))],
 		components: [createProfileActionRow(), createMainMenuActionRow("profile")],

@@ -202,6 +202,7 @@ export const handleShopInteraction = async (
 	interaction: ButtonInteraction,
 	page: number,
 ) => {
+	await interaction.deferUpdate();
 	await interaction.editReply({
 		embeds: [createShopEmbed(page)],
 		components:

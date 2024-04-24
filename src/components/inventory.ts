@@ -95,6 +95,7 @@ export const handleInventoryInteraction = async (
 	interaction: ButtonInteraction,
 	page: number,
 ) => {
+	await interaction.deferUpdate();
 	const { user } = await getUser(interaction.user.id);
 	const inventory = await getInventory(user.id);
 	await interaction.editReply({

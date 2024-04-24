@@ -2,6 +2,7 @@ import {
 	type ChatInputCommandInteraction,
 	SlashCommandBuilder,
 	ComponentType,
+	type ModalSubmitInteraction,
 } from "discord.js";
 import type { ICommand, ICommandData, ICommandExecute } from "../../types/bot";
 import { getUser } from "~/db";
@@ -26,7 +27,7 @@ import {
 	handleMainMenuInteraction,
 } from "~/components/main_menu";
 import { handleProfileInteraction } from "~/components/profile";
-import { log } from "~/util/log";
+import { handleDeleteItem } from "~/components/delete_item";
 
 const COLLECTOR_TIME = 120000;
 
@@ -40,10 +41,9 @@ const builder = new SlashCommandBuilder()
 	.setName(data.name)
 	.setDescription(data.description);
 
-const onInteraction: ICommandExecute<ChatInputCommandInteraction> = async (
-	client,
-	interaction,
-) => {
+const onInteraction: ICommandExecute<
+	ChatInputCommandInteraction | ModalSubmitInteraction
+> = async (client, interaction, cached) => {
 	const message = await interaction.reply({
 		embeds: [createMainMenuEmbed(await getUser(interaction.user.id))],
 		components: [createMainMenuActionRow()],
@@ -73,7 +73,6 @@ const onInteraction: ICommandExecute<ChatInputCommandInteraction> = async (
 			return;
 		}
 
-		await buttonInteraction.deferUpdate();
 		switch (buttonInteraction.customId) {
 			case "profile":
 				await handleProfileInteraction(buttonInteraction);
@@ -116,6 +115,9 @@ const onInteraction: ICommandExecute<ChatInputCommandInteraction> = async (
 					buttonInteraction,
 					selectedInventoryItem,
 				);
+				break;
+			case "delete_item":
+				await handleDeleteItem(buttonInteraction, selectedInventoryItem);
 				break;
 			case "market":
 				await handleMarketInteraction(buttonInteraction);
@@ -175,8 +177,6 @@ const onInteraction: ICommandExecute<ChatInputCommandInteraction> = async (
 			});
 			return;
 		}
-
-		await selectionInteraction.deferUpdate();
 
 		switch (selectionInteraction.customId) {
 			case "inventory_select": {

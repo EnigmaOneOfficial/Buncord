@@ -33,6 +33,7 @@ export const createSettingsActionRow = () => {
 export const handleSettingsInteraction = async (
 	interaction: ButtonInteraction,
 ) => {
+	await interaction.deferUpdate();
 	const { user } = await getUser(interaction.user.id);
 	await interaction.editReply({
 		embeds: [createSettingsEmbed(user)],

@@ -33,6 +33,7 @@ export const createAchievementsActionRow = () => {
 export const handleAchievementsInteraction = async (
 	interaction: ButtonInteraction,
 ) => {
+	await interaction.deferUpdate();
 	const { user } = await getUser(interaction.user.id);
 	await interaction.editReply({
 		embeds: [createAchievementsEmbed(user)],

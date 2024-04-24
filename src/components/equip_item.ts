@@ -39,6 +39,7 @@ export const handleEquipItemInteraction = async (
 	interaction: ButtonInteraction,
 	item?: IItem,
 ) => {
+	await interaction.deferUpdate();
 	if (!item) {
 		await interaction.editReply({
 			embeds: [createInventoryItemNotExistEmbed()],

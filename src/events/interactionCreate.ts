@@ -2,16 +2,14 @@ import {
 	type ChatInputCommandInteraction,
 	Collection,
 	Events,
+	type Interaction,
 } from "discord.js";
 import { error } from "~/util/log";
 import type { IEvent, IEventExecute } from "../../types/bot";
 import { gainXP, getUser, updateAnalytics, updateUser } from "~/db";
 
 const name = Events.InteractionCreate;
-const execute: IEventExecute<ChatInputCommandInteraction> = async (
-	client,
-	interaction,
-) => {
+const execute: IEventExecute<Interaction> = async (client, interaction) => {
 	const member = interaction.member;
 	if (!member) return;
 
@@ -26,31 +24,33 @@ const execute: IEventExecute<ChatInputCommandInteraction> = async (
 		avatar: interaction.user.displayAvatarURL() || "",
 	});
 
-	const command = client.commands.get(interaction.commandName);
-	if (!command || !command.onInteraction) return;
+	if (interaction.isChatInputCommand()) {
+		const command = client.commands.get(interaction.commandName);
+		if (!command || !command.onInteraction) return;
 
-	const { cooldowns } = client;
-	if (!cooldowns.has(command.data.name)) {
-		cooldowns.set(command.data.name, new Collection());
-	}
-	const now = Date.now();
-	const timestamps = cooldowns.get(command.data.name);
-	const cooldownAmount = (command.data.cooldown || 0) * 1000;
-	const timestamp = timestamps?.get(interaction.user.id);
-	if (timestamp) {
-		const expirationTime = timestamp + cooldownAmount;
-		if (now < expirationTime) {
-			return;
+		const { cooldowns } = client;
+		if (!cooldowns.has(command.data.name)) {
+			cooldowns.set(command.data.name, new Collection());
 		}
-	} else {
-		timestamps?.set(interaction.user.id, now);
-		setTimeout(() => timestamps?.delete(interaction.user.id), cooldownAmount);
-	}
+		const now = Date.now();
+		const timestamps = cooldowns.get(command.data.name);
+		const cooldownAmount = (command.data.cooldown || 0) * 1000;
+		const timestamp = timestamps?.get(interaction.user.id);
+		if (timestamp) {
+			const expirationTime = timestamp + cooldownAmount;
+			if (now < expirationTime) {
+				return;
+			}
+		} else {
+			timestamps?.set(interaction.user.id, now);
+			setTimeout(() => timestamps?.delete(interaction.user.id), cooldownAmount);
+		}
 
-	try {
-		await command.onInteraction(client, interaction);
-	} catch (err) {
-		error(err as string);
+		try {
+			await command.onInteraction(client, interaction);
+		} catch (err) {
+			error(err as string);
+		}
 	}
 };
 

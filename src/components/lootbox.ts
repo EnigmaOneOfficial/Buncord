@@ -35,6 +35,7 @@ export const createLootboxActionRow = () => {
 export const handleLootboxInteraction = async (
 	interaction: ButtonInteraction,
 ) => {
+	await interaction.deferUpdate();
 	await interaction.editReply({
 		embeds: [createLootboxEmbed()],
 		components: [createLootboxActionRow(), createMainMenuActionRow("market")],

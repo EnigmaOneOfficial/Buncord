@@ -52,6 +52,7 @@ export const createMarketActionRow = () => {
 export const handleMarketInteraction = async (
 	interaction: MessageComponentInteraction,
 ) => {
+	await interaction.deferUpdate();
 	await interaction.editReply({
 		embeds: [createMarketEmbed()],
 		components: [createMarketActionRow(), createMainMenuActionRow("market")],

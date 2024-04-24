@@ -55,6 +55,7 @@ export const createStatsActionRow = () => {
 export const handleStatsInteraction = async (
 	interaction: ButtonInteraction,
 ) => {
+	await interaction.deferUpdate();
 	const user = await getUser(interaction.user.id);
 	await interaction.editReply({
 		embeds: [createStatsEmbed(user)],

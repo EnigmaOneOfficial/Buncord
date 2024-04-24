@@ -36,6 +36,7 @@ export const createOpenLootboxActionRow = () => {
 export const handleOpenLootboxInteraction = async (
 	interaction: ButtonInteraction,
 ) => {
+	await interaction.deferUpdate();
 	const { user } = await getUser(interaction.user.id);
 	const random = Math.ceil(items.size * Math.random());
 	await addItemToInventory(user.id, random);

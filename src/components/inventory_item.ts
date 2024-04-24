@@ -55,6 +55,10 @@ export const createInventoryItemActionRow = (item: IUserItem) => {
 			.setDisabled(item.equipped === 0)
 			.setStyle(ButtonStyle.Primary),
 		new ButtonBuilder()
+			.setCustomId("delete_item")
+			.setLabel("Delete")
+			.setStyle(ButtonStyle.Danger),
+		new ButtonBuilder()
 			.setCustomId("inventory")
 			.setLabel("Back")
 			.setStyle(ButtonStyle.Secondary),
@@ -67,6 +71,7 @@ export const handleInventoryItemInteraction = async (
 	interaction: StringSelectMenuInteraction | ButtonInteraction,
 	selectedItem?: IItem,
 ) => {
+	await interaction.deferUpdate();
 	const inventory = await getInventory(interaction.user.id);
 	const item =
 		interaction instanceof StringSelectMenuInteraction

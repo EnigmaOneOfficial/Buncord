@@ -55,6 +55,7 @@ export const handleShopItemInteraction = async (
 	interaction: StringSelectMenuInteraction | ButtonInteraction,
 	selectedItem?: IItem,
 ) => {
+	await interaction.deferUpdate();
 	const item =
 		interaction instanceof StringSelectMenuInteraction
 			? items.find((item) => item.id === Number(interaction.values[0]))

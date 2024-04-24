@@ -3,6 +3,7 @@ import type {
 	Client,
 	Collection,
 	Message,
+	ModalSubmitInteraction,
 	PermissionResolvable,
 	SlashCommandBuilder,
 } from "discord.js";
@@ -15,14 +16,18 @@ export type IClient = Client & {
 	db: typeof db;
 };
 
-export type IEventExecute<T> = (client: IClient, ...args: T[]) => void;
-export type IEvent<T> = {
+export type IEventExecute<T = undefined> = (
+	client: IClient,
+	...args: T[]
+) => void;
+
+export type IEvent<T = undefined> = {
 	name: string;
 	once?: boolean;
 	execute: IEventExecute<T>;
 };
 
-export type IEvents = Collection<string, IEvent<unknown>>;
+export type IEvents = Collection<string, IEvent>;
 
 export type ICommandData = {
 	name: string;
@@ -33,16 +38,20 @@ export type ICommandData = {
 	permissions?: PermissionResolvable[];
 };
 
-export type ICommandExecute<T> = (
+export type ICommandExecute<T, K = undefined> = (
 	client: IClient,
 	interaction: T,
-	args?: string[],
+	...args: K[]
 ) => void;
-export type ICommand = {
+
+export type ICommand<T = undefined> = {
 	data: ICommandData;
 	builder?: Partial<SlashCommandBuilder>;
-	onMessage?: ICommandExecute<Message>;
-	onInteraction?: ICommandExecute<ChatInputCommandInteraction>;
+	onMessage?: ICommandExecute<Message, T>;
+	onInteraction?: ICommandExecute<
+		ChatInputCommandInteraction | ModalSubmitInteraction,
+		T
+	>;
 };
 export type ICommands = Collection<string, ICommand>;
 export type ICooldown = Collection<string, Collection<string, number>>;

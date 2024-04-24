@@ -80,6 +80,7 @@ export const createMainMenuActionRow = (selected?: Menu) => {
 export const handleMainMenuInteraction = async (
 	interaction: ButtonInteraction,
 ) => {
+	await interaction.deferUpdate();
 	return await interaction.editReply({
 		embeds: [createMainMenuEmbed(await getUser(interaction.user.id))],
 		components: [createMainMenuActionRow()],

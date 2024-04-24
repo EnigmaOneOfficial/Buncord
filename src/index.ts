@@ -33,6 +33,10 @@ for (const file of new Glob("*.ts").scanSync("./src/commands/")) {
 	const command = (await import(`./commands/${file}`)) as {
 		default: ICommand;
 	};
+	if (!command.default) {
+		error(`Invalid command file: ${file}`);
+		continue;
+	}
 	const { data, onMessage, onInteraction } = command.default;
 	if (!data) {
 		error(`Invalid command file: ${file}`);
@@ -43,20 +47,24 @@ for (const file of new Glob("*.ts").scanSync("./src/commands/")) {
 }
 log(`Commands: ${commands.map((command) => command.data.name).join(", ")}`);
 
-const events = new Collection<string, IEvent<unknown>>();
+const events = new Collection<string, IEvent>();
 for (const file of new Glob("*.ts").scanSync("./src/events/")) {
 	const event = (await import(`./events/${file}`)) as {
-		default: IEvent<unknown>;
+		default: IEvent;
 	};
+	if (!event.default) {
+		error(`Invalid event file: ${file}`);
+		continue;
+	}
 	const { name, once, execute } = event.default;
 	if (!name || !execute) {
 		error(`Invalid event file: ${file}`);
 		continue;
 	}
 	if (once) {
-		bot.once(name, (...args: unknown[]) => execute(bot, ...args));
+		bot.once(name, (...args) => execute(bot, ...args));
 	} else {
-		bot.on(name, (...args: unknown[]) => execute(bot, ...args));
+		bot.on(name, (...args) => execute(bot, ...args));
 	}
 
 	events.set(name, { name, once, execute });

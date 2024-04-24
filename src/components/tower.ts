@@ -58,6 +58,7 @@ export const createTowerActionRow = () => {
 export const handleTowerInteraction = async (
 	interaction: ButtonInteraction,
 ) => {
+	await interaction.deferUpdate();
 	const user = await getUser(interaction.user.id);
 	await interaction.editReply({
 		embeds: [createTowerEmbed(user)],
