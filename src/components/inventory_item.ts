@@ -47,12 +47,12 @@ export const createInventoryItemActionRow = (item: IUserItem) => {
 		new ButtonBuilder()
 			.setCustomId("equip_item")
 			.setLabel("Equip")
-			.setDisabled(item.equipped === 1)
+			.setDisabled(item.equipped === 1 || !item.details.slot)
 			.setStyle(ButtonStyle.Primary),
 		new ButtonBuilder()
 			.setCustomId("unequip_item")
 			.setLabel("Unequip")
-			.setDisabled(item.equipped === 0)
+			.setDisabled(item.equipped === 0 || !item.details.slot)
 			.setStyle(ButtonStyle.Primary),
 		new ButtonBuilder()
 			.setCustomId("delete_item")

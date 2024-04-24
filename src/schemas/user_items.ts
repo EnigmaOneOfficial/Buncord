@@ -29,4 +29,16 @@ export type IItem = {
 	description: string;
 	rarity: string;
 	stackable: boolean;
+	slot?:
+		| "Head"
+		| "Chest"
+		| "Legs"
+		| "Feet"
+		| "Hands"
+		| "Main Hand"
+		| "Off Hand"
+		| "Neck"
+		| "Ring"
+		| "Trinket"
+		| "Consumable";
 } & PrimitiveTable;

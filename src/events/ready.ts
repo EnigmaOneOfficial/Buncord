@@ -4,12 +4,12 @@ import type { IEvent, IEventExecute } from "../../types/bot";
 
 const name = Events.ClientReady;
 const once = true;
-const execute: IEventExecute<undefined> = async (client) => {
+const execute: IEventExecute = async (client) => {
 	log(`Bot: ${client.user?.tag}`);
 	log(`Guilds: ${client.guilds.cache.map((guild) => guild.name).join(", ")}`);
 };
 
-const ready: IEvent<undefined> = {
+const ready: IEvent = {
 	name,
 	once,
 	execute,

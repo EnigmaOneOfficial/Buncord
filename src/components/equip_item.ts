@@ -5,9 +5,8 @@ import {
 	ButtonStyle,
 	type ButtonInteraction,
 } from "discord.js";
-import { eq } from "drizzle-orm";
-import { db, items } from "~/db";
-import { user_items, type IItem } from "~/schemas/user_items";
+import { equipItem, items } from "~/db";
+import type { IItem } from "~/schemas/user_items";
 import {
 	createInventoryItemNotExistEmbed,
 	createInventoryItemNotExistActionRow,
@@ -49,14 +48,7 @@ export const handleEquipItemInteraction = async (
 			],
 		});
 	} else {
-		const updatedItem = await db
-			.update(user_items)
-			.set({
-				equipped: 1,
-			})
-			.where(eq(user_items.itemId, item.id))
-			.returning()
-			.then((rows) => rows[0]);
+		const updatedItem = await equipItem(interaction.user.id, item.id);
 		await interaction.editReply({
 			embeds: [createEquipItemEmbed(item)],
 			components: [createEquipItemActionRow(), createMainMenuActionRow("item")],

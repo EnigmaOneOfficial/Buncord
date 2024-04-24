@@ -1,14 +1,7 @@
 import { ChannelType, Collection, Events, type Message } from "discord.js";
 import { error, log } from "~/util/log";
 import type { IEvent, IEventExecute } from "../../types/bot";
-import {
-	gainXP,
-	getRequiredXPForNextLevel,
-	getUser,
-	updateAnalytics,
-	updateStats,
-	updateUser,
-} from "~/db";
+import { gainXP, getUser, updateAnalytics, updateUser } from "~/db";
 
 const name = Events.MessageCreate;
 const execute: IEventExecute<Message> = async (client, message) => {
@@ -63,7 +56,8 @@ const execute: IEventExecute<Message> = async (client, message) => {
 	setTimeout(() => timestamps?.delete(message.author.id), cooldownAmount);
 
 	try {
-		await command.onMessage(client, message, args);
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		await command.onMessage(client, message, args as any);
 	} catch (err) {
 		error(err as string);
 	}

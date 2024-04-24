@@ -3,24 +3,27 @@ import {
 	type ButtonInteraction,
 	ActionRowBuilder,
 	TextInputBuilder,
-	type ModalSubmitInteraction,
 	ButtonStyle,
 	TextInputStyle,
 	ButtonBuilder,
 	EmbedBuilder,
-	InteractionCollector,
-	type Message,
 } from "discord.js";
-import { eq } from "drizzle-orm";
-import { db } from "~/db";
-import { user_items, type IItem } from "~/schemas/user_items";
-import type { IClient } from "../../types/bot";
+import { removeItemFromInventory } from "~/db";
+import type { IItem } from "~/schemas/user_items";
 
 export const createDeleteItemModal = (item: IItem) => {
 	const modal = new ModalBuilder()
 		.setCustomId("delete_item")
 		.setTitle(item.name)
 		.addComponents(
+			new ActionRowBuilder<TextInputBuilder>().addComponents(
+				new TextInputBuilder()
+					.setCustomId("quantity")
+					.setLabel("Quantity")
+					.setStyle(TextInputStyle.Short)
+					.setPlaceholder("Enter quantity (Default: All)")
+					.setRequired(false),
+			),
 			new ActionRowBuilder<TextInputBuilder>().addComponents(
 				new TextInputBuilder()
 					.setCustomId(`confirm_delete_item_${item.id}`)
@@ -55,10 +58,12 @@ export const createDeleteItemNotExistActionRow = () => {
 	return actionRow;
 };
 
-export const createItemDeletedEmbed = () => {
+export const createItemDeletedEmbed = (item: IItem, quantity?: number) => {
 	const embed = new EmbedBuilder()
-		.setTitle("Item deleted")
-		.setDescription("The item has been deleted.")
+		.setTitle(item.name)
+		.setDescription(
+			`You have deleted ${quantity ? quantity : "all"} ${item.name}.`,
+		)
 		.setColor("#FFD700")
 		.setTimestamp();
 
@@ -102,15 +107,24 @@ export const handleDeleteItem = async (
 				field.startsWith("confirm_delete_item_"),
 			);
 			const text = field?.value;
+			const quantity = i.fields.getTextInputValue("quantity");
 			const id = field?.customId.split("_").pop();
 
 			if (!text || !id) {
 				return;
 			}
 			if (text === "confirm") {
-				await db.delete(user_items).where(eq(user_items.itemId, Number(id)));
+				await removeItemFromInventory(
+					interaction.user.id,
+					Number(id),
+					Number(quantity),
+				);
 				await interaction.editReply({
-					embeds: [createItemDeletedEmbed()],
+					embeds: [
+						quantity
+							? createItemDeletedEmbed(item, Number(quantity))
+							: createItemDeletedEmbed(item),
+					],
 					components: [createItemDeletedActionRow()],
 				});
 			}

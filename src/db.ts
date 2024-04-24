@@ -165,19 +165,59 @@ export const addItemToInventory = async (userId: string, itemId: number) => {
 export const removeItemFromInventory = async (
 	userId: string,
 	itemId: number,
+	quantity?: number,
 ) => {
 	const inventory = await getInventory(userId);
 	const item = inventory.find((i) => i.itemId === itemId);
 	if (item) {
-		if (item.quantity === 1) {
+		if (item.quantity === 1 || (quantity && quantity > item.quantity)) {
 			await db
 				.delete(user_items)
 				.where(eq(user_items.userId, userId) && eq(user_items.itemId, itemId));
 		} else {
 			await db
 				.update(user_items)
-				.set({ quantity: item.quantity - 1 })
+				.set({ quantity: item.quantity - (quantity || 1) })
 				.where(eq(user_items.userId, userId) && eq(user_items.itemId, itemId));
 		}
 	}
+};
+
+export const getEquippedItems = async (userId: string) => {
+	const inventory = await getInventory(userId);
+	return inventory.filter((item) => item.equipped === 1);
+};
+
+export const equipItem = async (userId: string, itemId: number) => {
+	const details = items.get(itemId);
+	if (!details?.slot) {
+		return;
+	}
+	const equippedItems = await getEquippedItems(userId);
+	const item = equippedItems.find((i) => i.details.slot === details.slot);
+
+	if (item) {
+		await db
+			.update(user_items)
+			.set({ equipped: 0 })
+			.where(
+				eq(user_items.userId, userId) && eq(user_items.itemId, item.itemId),
+			);
+	}
+
+	return await db
+		.update(user_items)
+		.set({ equipped: 1 })
+		.where(eq(user_items.userId, userId) && eq(user_items.itemId, itemId))
+		.returning()
+		.then((res) => res[0]);
+};
+
+export const unequipItem = async (userId: string, itemId: number) => {
+	return await db
+		.update(user_items)
+		.set({ equipped: 0 })
+		.where(eq(user_items.userId, userId) && eq(user_items.itemId, itemId))
+		.returning()
+		.then((res) => res[0]);
 };
