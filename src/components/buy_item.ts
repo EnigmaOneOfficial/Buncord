@@ -6,7 +6,7 @@ import {
 	type ButtonInteraction,
 } from "discord.js";
 import type { IItem } from "~/schemas/user_items";
-import { addItemToInventory, db, getUser, items } from "~/db";
+import { addItemToInventory, db, getUser, items, updateStats } from "~/db";
 import { shop_items } from "./shop";
 import { users } from "~/schemas/users";
 import { eq } from "drizzle-orm";
@@ -28,16 +28,6 @@ export const createBuyItemEmbed = (item: IItem) => {
 	return embed;
 };
 
-export const createNotEnoughGoldEmbed = () => {
-	const embed = new EmbedBuilder()
-		.setTitle("Not enough gold!")
-		.setDescription("You do not have enough gold to purchase this item.")
-		.setColor("#FF0000")
-		.setTimestamp();
-
-	return embed;
-};
-
 export const createBuyItemNotExistEmbed = () => {
 	const embed = new EmbedBuilder()
 		.setTitle("Item not found!")
@@ -46,17 +36,6 @@ export const createBuyItemNotExistEmbed = () => {
 		.setTimestamp();
 
 	return embed;
-};
-
-export const createNotEnoughGoldActionRow = () => {
-	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-		new ButtonBuilder()
-			.setCustomId("shop")
-			.setLabel("Back")
-			.setStyle(ButtonStyle.Secondary),
-	);
-
-	return actionRow;
 };
 
 export const createBuyItemNotExistActionRow = () => {
@@ -97,25 +76,15 @@ export const handleBuyItemInteraction = async (
 		const price =
 			shop_items.find((shopItem) => shopItem.id === item.id)?.price || 0;
 		if (gold < price) {
-			await interaction.editReply({
-				embeds: [createNotEnoughGoldEmbed()],
-				components: [
-					createNotEnoughGoldActionRow(),
-					createMainMenuActionRow("shop"),
-				],
-			});
-		} else {
-			await db
-				.update(user_stats)
-				.set({ gold: gold - price })
-				.where(eq(users.id, user.id));
-			const newItem = await addItemToInventory(user.id, item.id);
-			await interaction.editReply({
-				embeds: [createBuyItemEmbed(item)],
-				components: [createBuyItemActionRow(), createMainMenuActionRow("shop")],
-			});
-
-			return items.find((item) => item.id === newItem?.itemId);
+			return;
 		}
+		await updateStats(user.id, { gold: gold - price });
+		const newItem = await addItemToInventory(user.id, item.id);
+		await interaction.editReply({
+			embeds: [createBuyItemEmbed(item)],
+			components: [createBuyItemActionRow(), createMainMenuActionRow("shop")],
+		});
+
+		return items.find((item) => item.id === newItem?.itemId);
 	}
 };

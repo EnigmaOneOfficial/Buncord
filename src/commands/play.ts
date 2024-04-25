@@ -28,6 +28,8 @@ import {
 } from "~/components/main_menu";
 import { handleProfileInteraction } from "~/components/profile";
 import { handleDeleteItem } from "~/components/delete_item";
+import { handleResetUser } from "~/components/reset_user";
+import { handleAddStat } from "~/components/add_stat";
 
 const COLLECTOR_TIME = 120000;
 
@@ -79,6 +81,14 @@ const onInteraction: ICommandExecute<
 				break;
 			case "stats":
 				await handleStatsInteraction(buttonInteraction);
+				break;
+			case "add_strength":
+			case "add_defense":
+			case "add_intelligence":
+			case "add_dexterity":
+			case "add_constitution":
+			case "add_luck":
+				await handleAddStat(buttonInteraction);
 				break;
 			case "achievements":
 				await handleAchievementsInteraction(buttonInteraction);
@@ -159,6 +169,9 @@ const onInteraction: ICommandExecute<
 				break;
 			case "settings":
 				await handleSettingsInteraction(buttonInteraction);
+				break;
+			case "reset_user":
+				await handleResetUser(buttonInteraction);
 				break;
 			case "home":
 				await handleMainMenuInteraction(buttonInteraction);

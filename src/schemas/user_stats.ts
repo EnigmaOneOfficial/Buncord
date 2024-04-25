@@ -20,6 +20,7 @@ export const user_stats = sqliteTable("user_stats", {
 	dexterity: integer("dexterity").default(1),
 	constitution: integer("constitution").default(1),
 	luck: integer("luck").default(1),
+	statPoints: integer("stat_points").default(0),
 });
 
 export type IUserStats = NonNullableTable<typeof user_stats.$inferSelect>;

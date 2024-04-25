@@ -7,129 +7,14 @@ import {
 	StringSelectMenuBuilder,
 } from "discord.js";
 import { createMainMenuActionRow } from "./main_menu";
+import { items } from "~/db";
 
 const MAX_ITEMS_PER_PAGE = 10;
 
 export const shop_items = [
 	{
-		name: "Item 1",
 		id: 1,
-		price: 100,
-	},
-	{
-		name: "Item 2",
-		id: 2,
-		price: 200,
-	},
-	{
-		name: "Item 3",
-		id: 3,
-		price: 300,
-	},
-	{
-		name: "Item 4",
-		id: 4,
-		price: 400,
-	},
-	{
-		name: "Item 5",
-		id: 5,
-		price: 500,
-	},
-	{
-		name: "Item 6",
-		id: 6,
-		price: 600,
-	},
-	{
-		name: "Item 7",
-		id: 7,
-		price: 700,
-	},
-	{
-		name: "Item 8",
-		id: 8,
-		price: 800,
-	},
-	{
-		name: "Item 9",
-		id: 9,
-		price: 900,
-	},
-	{
-		name: "Item 10",
-		id: 10,
-		price: 1000,
-	},
-	{
-		name: "Item 11",
-		id: 11,
-		price: 1100,
-	},
-	{
-		name: "Item 12",
-		id: 12,
-		price: 1200,
-	},
-	{
-		name: "Item 13",
-		id: 13,
-		price: 1300,
-	},
-	{
-		name: "Item 14",
-		id: 14,
-		price: 1400,
-	},
-	{
-		name: "Item 15",
-		id: 15,
-		price: 1500,
-	},
-	{
-		name: "Item 16",
-		id: 16,
-		price: 1600,
-	},
-	{
-		name: "Item 17",
-		id: 17,
-		price: 1700,
-	},
-	{
-		name: "Item 18",
-		id: 18,
-		price: 1800,
-	},
-	{
-		name: "Item 19",
-		id: 19,
-		price: 1900,
-	},
-	{
-		name: "Item 20",
-		id: 20,
-		price: 2000,
-	},
-	{
-		name: "Item 21",
-		id: 21,
-		price: 2100,
-	},
-	{
-		name: "Item 22",
-		id: 22,
-		price: 2200,
-	},
-	{
-		name: "Item 23",
-		id: 23,
-		price: 2300,
-	},
-	{
-		name: "Item 24",
-		id: 24,
-		price: 2400,
+		price: 5,
 	},
 ];
 
@@ -141,7 +26,7 @@ export const createShopEmbed = (page: number) => {
 		.addFields(
 			shop_items
 				.map((item) => ({
-					name: item.name,
+					name: items.get(item.id)?.name ?? "Unknown Item",
 					value: `${item.price} coins`,
 				}))
 				.slice(
@@ -184,7 +69,7 @@ export const createShopSelectionRow = (page: number) => {
 		.addOptions(
 			shop_items
 				.map((item) => ({
-					label: item.name,
+					label: items.get(item.id)?.name ?? "Unknown Item",
 					value: item.id.toString(),
 				}))
 				.slice(

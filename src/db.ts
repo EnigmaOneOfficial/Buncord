@@ -71,43 +71,94 @@ export const getUser = async (id: string) => {
 };
 
 export const updateUser = async (id: string, data: Partial<IUsers>) => {
-	return await db.update(users).set(data).where(eq(users.id, id)).returning();
+	return (await db
+		.update(users)
+		.set(data)
+		.where(eq(users.id, id))
+		.returning()
+		.then((res) => res[0])) as IUsers;
 };
 
 export const updateStats = async (id: string, data: Partial<IUserStats>) => {
-	return await db
+	return (await db
 		.update(user_stats)
 		.set(data)
 		.where(eq(user_stats.userId, id))
-		.returning();
+		.returning()
+		.then((res) => res[0])) as IUserStats;
 };
 
 export const updateAnalytics = async (
 	id: string,
 	data: Partial<IUserAnalytics>,
 ) => {
-	return await db
+	return (await db
 		.update(user_analytics)
 		.set(data)
 		.where(eq(user_analytics.userId, id))
-		.returning();
+		.returning()
+		.then((res) => res[0])) as IUserAnalytics;
 };
 
-export const getRequiredXPForNextLevel = (level: number) =>
-	Math.ceil(0.1 * level ** 2 + 10 * level + 10);
+export const getRequiredXPForLevel = (level: number) => {
+	const baseXP = 50;
+	const levelScale = 0.16;
+	const levelOffset = 0.2;
+	return Math.round(
+		levelOffset * level * (level - 1) +
+			baseXP * ((2 ** ((level - 1) * levelScale) - 1) / (1 - 2 ** -levelScale)),
+	);
+};
 
 export const gainXP = async (id: string, xp: number) => {
 	const { stats } = await getUser(id);
-	const requiredXP = getRequiredXPForNextLevel(stats.level);
+	const requiredXP = getRequiredXPForLevel(stats.level + 1);
 	const newXP = stats.experience + xp;
 	if (newXP >= requiredXP) {
 		const newLevel = stats.level + 1;
 		const newExperience = newXP - requiredXP;
-		await updateStats(id, { level: newLevel, experience: newExperience });
+		await updateStats(id, {
+			level: newLevel,
+			experience: newExperience,
+			statPoints: stats.statPoints + 3,
+			gold: stats.gold + 100,
+		});
+		const mysteryBox = items.find(
+			(item) => item.name === "Level Up Mystery Box",
+		);
+		if (mysteryBox) {
+			await addItemToInventory(id, mysteryBox.id);
+		}
 		return { level: newLevel, experience: newExperience };
 	}
 	await updateStats(id, { experience: newXP });
 	return { level: stats.level, experience: newXP };
+};
+
+export const resetUser = async (id: string) => {
+	await updateStats(id, {
+		level: 1,
+		experience: 0,
+		statPoints: 0,
+		gold: 0,
+		strength: 1,
+		defense: 1,
+		intelligence: 1,
+		dexterity: 1,
+		constitution: 1,
+		luck: 1,
+		class: "None",
+		title: "",
+		guild: "None",
+		guildRank: "None",
+		currentDungeon: 0,
+		highestDungeon: 0,
+	});
+	await updateAnalytics(id, {
+		messages: 0,
+		interactions: 0,
+	});
+	await db.delete(user_items).where(eq(user_items.userId, id));
 };
 
 export const items = new Collection<number, IItem>();
@@ -170,7 +221,7 @@ export const removeItemFromInventory = async (
 	const inventory = await getInventory(userId);
 	const item = inventory.find((i) => i.itemId === itemId);
 	if (item) {
-		if (item.quantity === 1 || (quantity && quantity > item.quantity)) {
+		if (item.quantity === 1 || (quantity && quantity >= item.quantity)) {
 			await db
 				.delete(user_items)
 				.where(eq(user_items.userId, userId) && eq(user_items.itemId, itemId));
@@ -190,11 +241,11 @@ export const getEquippedItems = async (userId: string) => {
 
 export const equipItem = async (userId: string, itemId: number) => {
 	const details = items.get(itemId);
-	if (!details?.slot) {
+	if (!details?.equippable) {
 		return;
 	}
 	const equippedItems = await getEquippedItems(userId);
-	const item = equippedItems.find((i) => i.details.slot === details.slot);
+	const item = equippedItems.find((i) => i.details.kind === details.kind);
 
 	if (item) {
 		await db

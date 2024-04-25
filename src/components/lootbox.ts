@@ -6,6 +6,8 @@ import {
 	type ButtonInteraction,
 } from "discord.js";
 import { createMainMenuActionRow } from "./main_menu";
+import type { IUserItem } from "~/schemas/user_items";
+import { getInventory } from "~/db";
 
 export const createLootboxEmbed = () => {
 	const embed = new EmbedBuilder()
@@ -17,11 +19,16 @@ export const createLootboxEmbed = () => {
 	return embed;
 };
 
-export const createLootboxActionRow = () => {
+export const createLootboxActionRow = (inventory: IUserItem[]) => {
 	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
 		new ButtonBuilder()
 			.setCustomId("open_lootbox")
 			.setLabel("Open Lootbox")
+			.setDisabled(
+				inventory.find(
+					(item) => item.details.name === "Level Up Mystery Box",
+				) === undefined,
+			)
 			.setStyle(ButtonStyle.Primary),
 		new ButtonBuilder()
 			.setCustomId("market")
@@ -38,6 +45,9 @@ export const handleLootboxInteraction = async (
 	await interaction.deferUpdate();
 	await interaction.editReply({
 		embeds: [createLootboxEmbed()],
-		components: [createLootboxActionRow(), createMainMenuActionRow("market")],
+		components: [
+			createLootboxActionRow(await getInventory(interaction.user.id)),
+			createMainMenuActionRow("market"),
+		],
 	});
 };

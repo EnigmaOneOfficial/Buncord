@@ -5,7 +5,7 @@ import {
 	ButtonStyle,
 	type ButtonInteraction,
 } from "discord.js";
-import { getRequiredXPForNextLevel, getUser } from "~/db";
+import { getRequiredXPForLevel, getUser } from "~/db";
 import type { IUserAnalytics } from "~/schemas/user_analytics";
 import type { IUserStats } from "~/schemas/user_stats";
 import type { IUsers } from "~/schemas/users";
@@ -37,7 +37,7 @@ export const createProfileEmbed = ({
 			},
 			{
 				name: "Experience",
-				value: `${stats.experience}/${getRequiredXPForNextLevel(stats.level)}`,
+				value: `${stats.experience}/${getRequiredXPForLevel(stats.level + 1)}`,
 				inline: true,
 			},
 			{

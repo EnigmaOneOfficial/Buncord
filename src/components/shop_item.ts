@@ -6,7 +6,7 @@ import {
 	EmbedBuilder,
 	StringSelectMenuInteraction,
 } from "discord.js";
-import { items } from "~/db";
+import { getUser, items } from "~/db";
 import type { IItem } from "~/schemas/user_items";
 import { shop_items } from "./shop";
 import {
@@ -36,11 +36,12 @@ export const createShopItemEmbed = (item: IItem) => {
 	return embed;
 };
 
-export const createShopItemActionRow = () => {
+export const createShopItemActionRow = (price: number, gold: number) => {
 	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
 		new ButtonBuilder()
 			.setCustomId("buy_item")
 			.setLabel("Buy")
+			.setDisabled(price > gold)
 			.setStyle(ButtonStyle.Primary),
 		new ButtonBuilder()
 			.setCustomId("shop")
@@ -71,7 +72,13 @@ export const handleShopItemInteraction = async (
 	} else {
 		await interaction.editReply({
 			embeds: [createShopItemEmbed(item)],
-			components: [createShopItemActionRow(), createMainMenuActionRow("shop")],
+			components: [
+				createShopItemActionRow(
+					shop_items.find((shopItem) => shopItem.id === item.id)?.price || 0,
+					await getUser(interaction.user.id).then((user) => user.stats.gold),
+				),
+				createMainMenuActionRow("shop"),
+			],
 		});
 	}
 

@@ -16,29 +16,52 @@ export type IUserItem = NonNullableTable<
 		details: IItem;
 	}
 >;
+
+export type EquippableItemKind =
+	| "Head"
+	| "Chest"
+	| "Legs"
+	| "Feet"
+	| "Hands"
+	| "Main Hand"
+	| "Off Hand"
+	| "Neck"
+	| "Ring"
+	| "Trinket"
+	| "Consumable";
+export type NonEquippableItemKind = "Material" | "Key" | "Currency" | "Unknown";
+
 export const DefaultItem: IItem = {
 	id: 0,
 	name: "Unknown",
 	description: "An unknown item.",
 	rarity: "Bug",
+	equippable: false,
+	kind: "Unknown",
 	stackable: true,
 };
 export type IItem = {
 	id: number;
 	name: string;
 	description: string;
-	rarity: string;
+	equippable: boolean;
+	rarity:
+		| "Common"
+		| "Uncommon"
+		| "Rare"
+		| "Epic"
+		| "Legendary"
+		| "Mythic"
+		| "Unobtainable"
+		| "Bug"
+		| "Unknown"
+		| "Unique"
+		| "Set"
+		| "Event"
+		| "Special"
+		| "Artifact"
+		| "Relic"
+		| "Heirloom";
 	stackable: boolean;
-	slot?:
-		| "Head"
-		| "Chest"
-		| "Legs"
-		| "Feet"
-		| "Hands"
-		| "Main Hand"
-		| "Off Hand"
-		| "Neck"
-		| "Ring"
-		| "Trinket"
-		| "Consumable";
+	kind: EquippableItemKind | NonEquippableItemKind;
 } & PrimitiveTable;

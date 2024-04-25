@@ -13,7 +13,7 @@ export const createSettingsEmbed = (user: IUsers) => {
 	const embed = new EmbedBuilder()
 		.setTitle("Settings")
 		.setColor("#FFD700")
-		.setDescription("Settings are not yet implemented. Check back later!")
+		.setDescription("Change your settings and manage your account.")
 		.setTimestamp();
 
 	return embed;
@@ -21,6 +21,10 @@ export const createSettingsEmbed = (user: IUsers) => {
 
 export const createSettingsActionRow = () => {
 	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+		new ButtonBuilder()
+			.setCustomId("reset_user")
+			.setLabel("Reset User")
+			.setStyle(ButtonStyle.Danger),
 		new ButtonBuilder()
 			.setCustomId("home")
 			.setLabel("Back")

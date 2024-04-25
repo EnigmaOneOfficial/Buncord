@@ -44,7 +44,8 @@ export type ICommandExecute<T, K = undefined> = (
 	...args: K[]
 ) => void;
 
-export type ICommand<T = undefined> = {
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+export type ICommand<T = any> = {
 	data: ICommandData;
 	builder?: Partial<SlashCommandBuilder>;
 	onMessage?: ICommandExecute<Message, T>;

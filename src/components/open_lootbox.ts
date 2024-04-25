@@ -5,8 +5,14 @@ import {
 	ButtonStyle,
 	type ButtonInteraction,
 } from "discord.js";
-import type { IItem } from "~/schemas/user_items";
-import { addItemToInventory, getUser, items } from "~/db";
+import type { IItem, IUserItem } from "~/schemas/user_items";
+import {
+	addItemToInventory,
+	getInventory,
+	getUser,
+	items,
+	removeItemFromInventory,
+} from "~/db";
 import { createMainMenuActionRow } from "./main_menu";
 
 export const createOpenLootboxEmbed = (item?: IItem) => {
@@ -19,11 +25,16 @@ export const createOpenLootboxEmbed = (item?: IItem) => {
 	return embed;
 };
 
-export const createOpenLootboxActionRow = () => {
+export const createOpenLootboxActionRow = (inventory: IUserItem[]) => {
 	const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
 		new ButtonBuilder()
 			.setCustomId("open_lootbox")
 			.setLabel("Open Another")
+			.setDisabled(
+				inventory.find(
+					(item) => item.details.name === "Level Up Mystery Box",
+				) === undefined,
+			)
 			.setStyle(ButtonStyle.Primary),
 		new ButtonBuilder()
 			.setCustomId("lootboxes")
@@ -38,12 +49,18 @@ export const handleOpenLootboxInteraction = async (
 ) => {
 	await interaction.deferUpdate();
 	const { user } = await getUser(interaction.user.id);
+	const inventory = await getInventory(user.id);
 	const random = Math.ceil(items.size * Math.random());
+	const mysteryBox = inventory.find(
+		(item) => item.details.name === "Level Up Mystery Box",
+	);
+	if (mysteryBox === undefined) return;
 	await addItemToInventory(user.id, random);
+	await removeItemFromInventory(user.id, mysteryBox.itemId);
 	await interaction.editReply({
 		embeds: [createOpenLootboxEmbed(items.get(random))],
 		components: [
-			createOpenLootboxActionRow(),
+			createOpenLootboxActionRow(inventory),
 			createMainMenuActionRow("lootboxes"),
 		],
 	});

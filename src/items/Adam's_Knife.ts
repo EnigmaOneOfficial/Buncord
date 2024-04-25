@@ -5,7 +5,8 @@ const item: IItem = {
 	name: "Adam's Knife",
 	description: "The first knife created by the first man.",
 	rarity: "Unobtainable",
-	slot: "Main Hand",
+	equippable: true,
+	kind: "Main Hand",
 	stackable: false,
 };
 
